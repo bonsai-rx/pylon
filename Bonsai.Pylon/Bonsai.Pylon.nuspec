@@ -14,4 +14,9 @@
     <copyright>$author$ © 2017</copyright>
     <tags>Bonsai Basler pylon</tags>
   </metadata>
+  <files>
+    <file src="..\Externals\Basler.Pylon\pylon License.rtf" target="build\net45\pylonLicense.rtf"/>
+    <file src="..\Externals\Basler.Pylon\pylon Third-Party Licenses.html" target="build\net45\pylonThird-PartyLicenses.html"/>
+    <file src="..\Externals\Basler.Pylon\**\*.dll" target="build\net45\bin"/>
+  </files>
 </package>
