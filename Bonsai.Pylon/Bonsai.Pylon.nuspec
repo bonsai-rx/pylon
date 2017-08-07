@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://bitbucket.org/horizongir/bonsai.pylon/raw/4430f7a8bfc9b1e2cfbb6473125a1362c17e4f5e/LICENSE</licenseUrl>
+    <projectUrl>https://bitbucket.org/horizongir/bonsai.pylon</projectUrl>
+    <iconUrl>https://bitbucket.org/horizongir/bonsai/raw/7aacc64dc4647e57362ab310238591dc197fef0d/Resources/Bonsai.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>$author$ © 2017</copyright>
+    <tags>Bonsai Basler pylon</tags>
+  </metadata>
+</package>
