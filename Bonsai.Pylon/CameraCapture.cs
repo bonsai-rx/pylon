@@ -201,7 +201,9 @@ namespace Bonsai.Pylon
 
             public override TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
             {
-                var cameras = CameraFinder.Enumerate().Select(camera => camera[PLCamera.DeviceSerialNumber.Name]);
+                var cameras = from camera in CameraFinder.Enumerate()
+                              where camera.ContainsKey(CameraInfoKey.SerialNumber)
+                              select camera[CameraInfoKey.SerialNumber];
                 return new StandardValuesCollection(cameras.ToArray());
             }
         }
