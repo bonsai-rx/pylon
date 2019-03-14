@@ -66,9 +66,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CameraCapture.cs" />
+    <Compile Include="PylonCapture.cs" />
     <Compile Include="CaptureException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PylonDataFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bonsai.Pylon.nuspec" />

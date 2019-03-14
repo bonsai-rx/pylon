@@ -10,23 +10,30 @@ using System.Threading.Tasks;
 
 namespace Bonsai.Pylon
 {
-    public class CameraCapture : Source<IplImage>
+    [Description("Acquires a sequence of images from a Basler camera using the pylon software.")]
+    public class PylonCapture : Source<PylonDataFrame>
     {
-        IObservable<IplImage> source;
+        IObservable<PylonDataFrame> source;
         readonly object captureLock = new object();
 
-        public CameraCapture()
+        public PylonCapture()
         {
-            source = Observable.Create<IplImage>((observer, cancellationToken) =>
+            source = Observable.Create<PylonDataFrame>((observer, cancellationToken) =>
             {
                 return Task.Factory.StartNew(() =>
                 {
                     lock (captureLock)
                     {
+                        var configFile = ParameterFile;
                         using (var camera = new Camera(SerialNumber))
                         using (var converter = new PixelDataConverter())
                         {
                             camera.Open();
+                            if (!string.IsNullOrEmpty(configFile))
+                            {
+                                camera.Parameters.Load(configFile, ParameterPath.CameraDevice);
+                            }
+
                             try
                             {
                                 camera.StreamGrabber.ImageGrabbed += (sender, e) =>
@@ -42,7 +49,7 @@ namespace Bonsai.Pylon
                                         converter.OutputPixelFormat = outputFormat;
                                         var output = new IplImage(size, depth, channels);
                                         converter.Convert(output.ImageData, output.WidthStep * output.Height, result);
-                                        observer.OnNext(output);
+                                        observer.OnNext(new PylonDataFrame(output, result));
                                     }
                                 };
 
@@ -75,9 +82,15 @@ namespace Bonsai.Pylon
         }
 
         [TypeConverter(typeof(SerialNumberConverter))]
+        [Description("The serial number of the camera from which to acquire images.")]
         public string SerialNumber { get; set; }
 
-        void GetImageDepth(PixelType pixelType, out IplDepth depth, out int channels, out PixelType outputFormat)
+        [FileNameFilter("Pylon Feature Stream (*.pfs)|*.pfs|All Files (*.*)|*.*")]
+        [Editor("Bonsai.Design.OpenFileNameEditor, Bonsai.Design", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+        [Description("The name of the file containing the camera configuration parameters.")]
+        public string ParameterFile { get; set; }
+
+        static void GetImageDepth(PixelType pixelType, out IplDepth depth, out int channels, out PixelType outputFormat)
         {
             switch (pixelType)
             {
@@ -187,7 +200,7 @@ namespace Bonsai.Pylon
             }
         }
 
-        public override IObservable<IplImage> Generate()
+        public override IObservable<PylonDataFrame> Generate()
         {
             return source;
         }

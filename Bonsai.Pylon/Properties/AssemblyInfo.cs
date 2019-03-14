@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Bonsai - Pylon Library")]
-[assembly: AssemblyDescription("A Bonsai Library for interfacing with Basler cameras using the pylon SDK.")]
+[assembly: AssemblyDescription("A Bonsai Library for interfacing with Basler cameras using the pylon 5.1.0 runtime.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Gonçalo Lopes")]
 [assembly: AssemblyProduct("Bonsai.Pylon")]

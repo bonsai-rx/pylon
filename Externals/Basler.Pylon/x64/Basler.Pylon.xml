@@ -4,6 +4,334 @@
         "PylonNET"
     </assembly>
     <members>
+        <member name="M:Basler.Pylon.Configuration.RaiseUnsupportedFeatureException(System.String)">
+            <summary>Raise an exception stating that a feature is not supported.</summary>
+            <param name="msg">The exception msg.</param>
+        </member>
+        <member name="P:Basler.Pylon.ActionCommandTrigger.GroupMask">
+            <summary>Provides read access to the action group mask.</summary>
+            <returns>Returns action group mask.</returns>
+            <remarks>
+The default value of the group mask is 0x7fffffff but it can be customized with Configure(ICamera(), Int32, Int32, Int32, Int32).
+<para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks>
+        </member>
+        <member name="P:Basler.Pylon.ActionCommandTrigger.GroupKey">
+            <summary>Provides read access to the action group key.</summary>
+            <returns>Returns action group key.</returns>
+            <remarks>
+The default value of the group key is random but also customizable with Configure(ICamera(), Int32, Int32, Int32, Int32).
+<para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks>
+        </member>
+        <member name="P:Basler.Pylon.ActionCommandTrigger.DeviceKey">
+            <summary>Provides read access to the action device key.</summary>
+            <returns>Returns action device key.</returns>
+            <remarks>
+The default value of the device key is random but also customizable with Configure(ICamera(), Int32, Int32, Int32, Int32).
+<para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks>
+        </member>
+        <member name="P:Basler.Pylon.ActionCommandTrigger.ActionId">
+            <summary>Provides read access to the action ID.</summary>
+            <returns>Returns action name.</returns>
+            <remarks>
+The default value of the action ID is 1 but it can be customized with Configure(ICamera(), Int32, Int32, Int32, Int32).
+<para><b>Thread safety: </b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks>
+        </member>
+        <member name="P:Basler.Pylon.ActionCommandTrigger.BroadcastAddress">
+            <summary>Provides read access to the broadcast address.</summary>
+            <returns>Returns the broadcast address.</returns>
+            <remarks>
+The broadcast address is set during the camera configuration and is determined automatically.
+<para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks>
+        </member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Configure(Basler.Pylon.ICamera[],System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>This configuration is only for advanced use cases and 
+ changes the configuration of the cameras so that the cameras can be triggered by the given action command ID.
+Compared to Configure(ICamera()), the configuration of the trigger is up to the camera user.</summary>
+            <param name="cameras">The array with cameras to be configured.</param>
+            <param name="deviceKey">
+The device key addresses the cameras managed by an application. The device key is only known to the application controlling the camera devices and ensures that only this application can trigger the camera devices. Therefore, the device key cannot be read from a camera. An exact match of the deviceKey sent and the device key stored in a camera is required for executing an action.
+</param>
+            <param name="actionId">
+The ID of the action command to configure.
+</param>
+            <param name="groupKey">
+The group key is used to create groups of cameras or actions. An exact match of the groupKey sent and the group key stored in a camera for an action is required for executing an action.
+</param>
+            <param name="groupMask">
+The group mask is a bit mask that allows sending an action to a subgroup of the cameras addressed by the deviceKeygroupKey pair. The result of a bitwise AND operation of groupMask and the group mask stored in a camera for an action must be non-zero for executing an action.
+</param>
+            <remarks>
+                <para>
+                    <b>Preconditions for updating the camera setting:</b>
+                    <br />
+                    <list type="bullet">
+                        <item>All cameras must be GigE cameras.</item>
+                        <item>The array with cameras must not be empty.</item>
+                        <item>All cameras must be open.</item>
+                        <item>All cameras must support action commands.</item>
+                        <item>The actionId parameter must exist for all cameras.</item>
+                        <item>The action ID must be connected to a properly configured trigger.</item>
+                        <item>All cameras must support the FrameStart trigger.</item>
+                        <item>The following features must be writeable: ActionDeviceKey, ActionGroupMask, ActionGroupKey, and ActionSelector.</item>
+                    </list>
+                </para>
+                <para>
+                    <b>Thread safety:</b> This method is synchronized with the lock of the camera object.</para>
+                <para>
+                    <b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+In addition, the best matching subnet limited broadcast address will be set and is readable with the BroadcastAddress parameter. If no match is found, the broadcast address 255.255.255.255 will be used.
+</remarks>
+        </member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Configure(Basler.Pylon.ICamera[])">
+            <summary> Changes the configuration of the cameras so that it is triggered by the first
+available action command, for instance "Action 1". For more information, see PLGigECamera.ActionSelector.
+This configuration enables the frame start trigger and disables all other trigger
+types. The first available action command is selected as the trigger source, i.e., the
+camera will be triggered by action commands issued by the application.</summary>
+            <param name="cameras">The array with cameras to be configured.</param>
+            <remarks>
+                <para>
+                    <b>Preconditions for updating the camera setting:</b>
+                    <br />
+                    <list type="bullet">
+                        <item>The array with cameras must not be empty.</item>
+                        <item>All cameras must be open.</item>
+                        <item>All cameras must support action commands.</item>
+                        <item>All cameras must support the FrameStart trigger.</item>
+                        <item>All cameras must be GigE cameras.</item>
+                        <item>The following features must be writeable: ActionDeviceKey, ActionGroupMask, ActionGroupKey, ActionSelector, TriggerSelector, TriggerMode, TriggerSource, and AcquisitionMode.</item>
+                    </list>
+                </para>
+                <para>
+                    <b>Thread safety:</b> This method is synchronized with the lock of the camera object.</para>
+                <para>
+                    <b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+The configuration uses a randomly generated device and group key for each call. The group mask is fixed to 0x7fffffff. 
+In addition, the best matching subnet limited broadcast address will be set and is readable with the BroadcastAddress parameter. If no match is found, the broadcast address 255.255.255.255 will be used.
+</remarks>
+        </member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Schedule(System.Int32,System.Int32,System.Int32,System.Int64,System.String,System.Int32,Basler.Pylon.ActionCommandResult[])">
+            <summary>
+Issues a scheduled action command via broadcast with acknowledgment. 
+</summary>
+            <param name="deviceKey">
+The device key addresses the cameras managed by an application. The device key is only known to the application controlling the camera devices and ensures that only this application can trigger the camera devices. Therefore, the device key cannot be read from a camera. An exact match of the deviceKey sent and the device key stored in a camera is required for executing an action.
+</param>
+            <param name="groupKey">
+The group key is used to create groups of cameras or actions. An exact match of the groupKey sent and the group key stored in a camera for an action is required for executing an action.
+</param>
+            <param name="groupMask">
+The group mask is a bit mask that allows sending an action to a subgroup of the cameras addressed by the deviceKeygroupKey pair. The result of a bitwise AND operation of groupMask and the group mask stored in a camera for an action must be non-zero for executing an action.
+</param>
+            <param name="actiontimeNs">
+Time in nanoseconds when the action is to be executed. The actual value depends on the used master clock. A master clock value for a set of synchronized camera devices can be obtained, for instance, by reading the (GevTimestampValue) timestamp value after latching the (GevTimestampControlLatch) timestamp value from one camera device of the set or by calling <see cref="M:Basler.Pylon.ActionCommandTrigger.GetNow(Basler.Pylon.ICamera)" />. The actionTimeNs must be smaller than or equal to INT64_MAX. 
+</param>
+            <param name="broadcastAddress">
+The broadcast address in dot notation where the command will be broadcast to, e.g., 255.255.255.255 (all adapters, default), 192.168.1.255 (all cameras in a single subnet 192.168.1.xxx), 192.168.1.38 (single camera). See the note below.
+</param>
+            <param name="timeoutMs">
+Time in milliseconds that the call is waiting for acknowledges of the cameras addressed. Waiting for acknowledges is stopped if NumResults have been received.
+</param>
+            <param name="results">
+Returns the <see cref="T:Basler.Pylon.ActionCommandResult" /> action command result status. The initialization of the result items can be done by this method, i.e., all zero items will be initialized.
+</param>
+The function is thread-safe. 
+<returns>
+Returns true if all results are <see cref="F:Basler.Pylon.ActionCommandStatus.Ok" />.
+Returns true if no results have been requested.
+</returns><remarks><para><b>Preconditions for scheduling action commands:</b><br /><list type="bullet"><item>The GigE transport layer must be available.</item><item>The actionTimeNs must be smaller than or equal to INT64_MAX.</item><item>The length of results array given must not be zero.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces 
+is executed sequentially for each interface. That's why additional latency is added to the execution time 
+of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using
+the broadcast address 255.255.255.255.</remarks></member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Schedule(System.Int32,System.Int32,System.Int32,System.Int64,System.String)">
+            <summary>
+Issues a scheduled action command via broadcast without acknowledgment of success/failure.
+</summary>
+            <param name="deviceKey">
+The device key addresses the cameras managed by an application. The device key is only known to the application controlling the camera devices and ensures that only this application can trigger the camera devices. Therefore, the device key cannot be read from a camera. An exact match of the deviceKey sent and the device key stored in a camera is required for executing an action.
+</param>
+            <param name="groupKey">
+The group key is used to create groups of cameras or actions. An exact match of the groupKey sent and the group key stored in a camera for an action is required for executing an action.
+</param>
+            <param name="groupMask">
+The group mask is a bit mask that allows sending an action to a subgroup of the cameras addressed by the deviceKeygroupKey pair. The result of a bitwise AND operation of groupMask and the group mask stored in a camera for an action must be non-zero for executing an action.
+</param>
+            <param name="actiontimeNs">
+Time in nanoseconds when the action is to be executed. The actual value depends on the master clock used. A master clock value for a set of synchronized camera devices can be obtained, for instance, by reading the (GevTimestampValue) timestamp value after latching the (GevTimestampControlLatch) timestamp value from one camera device of the set or by calling <see cref="M:Basler.Pylon.ActionCommandTrigger.GetNow(Basler.Pylon.ICamera)" />. The actionTimeNs must be smaller than or equal to INT64_MAX. 
+</param>
+            <param name="broadcastAddress">
+The broadcast address in dot notation where the command will be broadcast to, e.g., 255.255.255.255 (all adapters, default), 192.168.1.255 (all cameras in a single subnet 192.168.1.xxx), 192.168.1.38 (single camera). See the note below.
+</param>
+
+The action command feature lets you trigger actions in multiple cameras at roughly the same time or at a defined point in time (scheduled action command) by using a single broadcast protocol message (without extra cabling). Action commands are used in cameras in the same way as for example the digital input lines.
+
+<remarks><para><b>Preconditions for scheduling action commands:</b><br /><list type="bullet"><item>The GigE transport layer must be available.</item><item>The actionTimeNs must be smaller than or equal to INT64_MAX.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces 
+is executed sequentially for each interface. That's why additional latency is added to the execution time 
+of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using
+the broadcast address 255.255.255.255.</remarks></member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Schedule(System.Int64)">
+            <summary>
+Issues a scheduled action command via broadcast without acknowledgment of success/failure and and has to be used in combination with Configure(ICamera()). In addition, it's possible to create more customizable action command configurations with Configure(ICamera(), Int32, Int32, Int32, Int32). 
+</summary>
+            <param name="actiontimeNs">
+Time in nanoseconds when the action is to be executed. The actual value depends on the master clock used. A master clock value for a set of synchronized camera devices can be obtained, for instance, by reading the (GevTimestampValue) timestamp value after latching the (GevTimestampControlLatch) timestamp value of one camera device of the set or by calling <see cref="M:Basler.Pylon.ActionCommandTrigger.GetNow(Basler.Pylon.ICamera)" />. 
+</param>
+
+The action command feature lets you trigger actions in multiple cameras at roughly the same time or at a defined point in time (scheduled action command) by using a single broadcast protocol message (without extra cabling). Action commands are used in cameras in the same way as, for example, the digital input lines.
+
+<remarks><para><b>Preconditions:</b><br /><list type="bullet"><item>The GigE transport layer must be available.</item><item>The Configure(ICamera()) configuration method must have been called and executed successfully.</item><item>The actionTimeNs must be smaller than or equal to INT64_MAX.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces 
+is executed sequentially for each interface. That's why additional latency is added to the execution time 
+of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using
+the broadcast address 255.255.255.255.</remarks></member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Issue(System.Int32,System.Int32,System.Int32,System.String,System.Int32,Basler.Pylon.ActionCommandResult[])">
+            <summary>
+Issues an action command via broadcast with acknowledgment.
+</summary>
+            <param name="deviceKey">
+The device key addresses the cameras managed by an application. The device key is only known to the application controlling the camera devices and ensures that only this application can trigger the camera devices. Therefore, the device key cannot be read from a camera. An exact match of the deviceKey sent and the device key stored in a camera is required for executing an action.
+</param>
+            <param name="groupKey">
+The group key is used to create groups of cameras or actions. An exact match of the groupKey sent and the group key stored in a camera for an action is required for executing an action.
+</param>
+            <param name="groupMask">
+The group mask is a bit mask that allows sending an action to a subgroup of the cameras addressed by the device and group key. The result of a bitwise AND operation of groupMask and the group mask stored in a camera for an action must be non-zero for executing an action.
+</param>
+            <param name="broadcastAddress">
+The broadcast address in dot notation where the command will be broadcast to, e.g., 255.255.255.255 (all adapters, default), 192.168.1.255 (all cameras in a single subnet 192.168.1.xxx), 192.168.1.38 (single camera). See the note below.
+</param>
+            <param name="timeoutMs">
+Time in milliseconds that the call is waiting for acknowledges of the cameras addressed. Waiting for acknowledges is stopped if NumResults have been received.
+</param>
+            <param name="results">
+Returns the <see cref="T:Basler.Pylon.ActionCommandResult" /> action command result status. The initialization of the result items can be done by this method, i.e., all zero items will be initialized.
+</param>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces is executed sequentially for each interface. That's why additional latency is added to the execution time of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using the broadcast address 255.255.255.255. IP4 addresses must be used.
+The function is thread-safe. 
+<returns>
+Returns true if all results are <see cref="F:Basler.Pylon.ActionCommandStatus.Ok" />.
+Returns true if no results have been requested.
+</returns><remarks><para><b>Preconditions for issuing action commands:</b><br /><list type="bullet"><item>The GigE transport layer must be available.</item><item>The length of results array given must not be zero.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces 
+is executed sequentially for each interface. That's why additional latency is added to the execution time 
+of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using
+the broadcast address 255.255.255.255.</remarks></member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Issue(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+Issues an action command via broadcast without acknowledgment of success/failure.
+</summary>
+            <param name="deviceKey">
+The device key addresses the cameras managed by an application. The device key is only known to the application controlling the camera devices and ensures that only this application can trigger the camera devices. Therefore, the device key cannot be read from a camera. An exact match of the deviceKey sent and the device key stored in a camera is required for executing an action.
+</param>
+            <param name="groupKey">
+The group key is used to create groups of cameras or actions. An exact match of the groupKey sent and the group key stored in a camera for an action is required for executing an action.
+</param>
+            <param name="groupMask">
+The group mask is a bit mask that allows sending an action to a subgroup of the cameras addressed by the device and group key. The result of a bitwise AND operation of groupMask and the group mask stored in a camera for an action must be non-zero for executing an action.
+</param>
+            <param name="broadcastAddress">
+The broadcast address in dot notation where the command will be broadcast to, e.g., 255.255.255.255 (all adapters, default), 192.168.1.255 (all cameras in a single subnet 192.168.1.xxx), 192.168.1.38 (single camera). See the note below.
+</param>
+
+The action command feature lets you trigger actions in multiple cameras at roughly the same time or at a defined point in time (scheduled action command) by using a single broadcast protocol message (without extra cabling). Action commands are used in cameras in the same way as, for example, the digital input lines.
+
+<remarks><para><b>Preconditions for issuing action commands:</b><br /><list type="bullet"><item>The GigE transport layer must be available.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces 
+is executed sequentially for each interface. That's why additional latency is added to the execution time 
+of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using
+the broadcast address 255.255.255.255. </remarks></member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.Issue">
+            <summary>
+Issues an action command via broadcast without acknowledgment of success/failure and has to be used in combination with Configure(ICamera()).
+In addition, it's possible to create more customizable action command configurations with Configure(ICamera(), Int32, Int32, Int32, Int32).
+</summary>
+
+The action command feature lets you trigger actions on multiple cameras at roughly the same time or at a defined point in time (scheduled action command) by using a single broadcast protocol message (without extra cabling). Action commands are used in cameras in the same way as, for example, the digital input lines.
+
+<remarks><para><b>Preconditions:</b><br /><list type="bullet"><item>The GigE transport layer must be available.</item><item>The Configure(ICamera()) configuration method must have been called and executed successfully.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para>
+If a Microsoft Windows operating system is used, sending a broadcast out on multiple network interfaces 
+is executed sequentially for each interface. That's why additional latency is added to the execution time 
+of a command when sending a broadcast message over a wider broadcast address range than necessary, e.g., when using
+the broadcast address 255.255.255.255.</remarks></member>
+        <member name="M:Basler.Pylon.ActionCommandTrigger.GetNow(Basler.Pylon.ICamera)">
+            <summary>
+Determines the timestamp value of the given camera.
+</summary>
+            <param name="camera">
+The camera object used for the time enquiry.
+</param>
+            <returns>
+Returns the timestamp value of the given camera.
+</returns>
+            <remarks>
+                <para>
+                    <b>Preconditions for determining the timestamp:</b>
+                    <br />
+                    <list type="bullet">
+                        <item>The camera is a GigE camera.</item>
+                        <item>The camera is open.</item>
+                        <item>The camera supports the "GevTimestampValue" feature.</item>
+                    </list>
+                </para>
+
+The timestamp is determined by reading the "GevTimestampValue" timestamp value after latching the "GevTimestampControlLatch" timestamp value. 
+<para><b>Thread safety:</b> This method is synchronized with the lock of the camera object.</para><para><b>Error safety:</b> Can throw exceptions if the preconditions are not met.</para></remarks>
+        </member>
+        <member name="T:Basler.Pylon.ActionCommandTrigger">
+            <summary> 
+Provides simplified access to GigE action commands.
+It can be used to automatically or manually configure the DeviceKey, GroupKey, and GroupMask features for cameras. It can also
+configure the camera's trigger and set the trigger source to action command. 
+In addition, there are some static methods for issuing and scheduling an action command.
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandResult.ActionCommandStatus">
+            <summary>
+GigE Vision status code returned by the camera. See Basler.Pylon.ActionCommandStatus for more information.
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandResult.CameraAddress">
+            <summary>
+IP address of the camera.
+</summary>
+        </member>
+        <member name="T:Basler.Pylon.ActionCommandResult">
+            <summary>
+Contains detailed results of calling Issue or Schedule methods. 
+</summary>
+        </member>
+        <member name="T:Basler.Pylon.ActionCommandStatus">
+            <summary>
+Lists possible status codes returned by Basler.Pylon.ActionCommandTrigger.Issue or Basler.Pylon.ActionCommandTrigger.Schedule. 
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandStatus.NoAcknowledgeReceived">
+            <summary>
+No acknowledge received for action command.
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandStatus.ActionLate">
+            <summary>
+The requested scheduled action command was requested at a point in time that is in the past.
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandStatus.Overflow">
+            <summary>
+Returned when the scheduled action commands queue is full and the camera cannot accept the additional request. The action command has been discarded by the camera. 
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandStatus.NoReferenceTime">
+            <summary>
+The camera is not synchronized to a master clock to be used as time reference. Typically used when scheduled action commands cannot be scheduled for a future time since the reference time coming from IEEE 1588 is not locked. The action command has been ignored by the camera. 
+</summary>
+        </member>
+        <member name="F:Basler.Pylon.ActionCommandStatus.Ok">
+            <summary>
+The camera acknowledged the command. 
+</summary>
+        </member>
         <member name="M:Basler.Pylon.PixelDataConverter.IsSupportedOutputFormat(Basler.Pylon.PixelType)">
             <summary> Indicates if the given pixel format is a supported output format. </summary>
             <param name="destinationPixelType"> The pixel format of the destination image.</param>
@@ -461,6 +789,9 @@ can be used to convert the input image before saving it.
         <member name="T:Basler.Pylon.ImageFileFormat">
             <summary> List of available file formats for ImagePersistence.</summary>
         </member>
+        <member name="F:Basler.Pylon.ImageFileFormat.Raw">
+            <summary>Saves the raw image buffer data. Packed image formats are unpacked. In the format used for saving, the data cannot be loaded using ImagePersistence.Load</summary>
+        </member>
         <member name="F:Basler.Pylon.ImageFileFormat.Png">
             <summary>Portable Network Graphics (PNG) format. Lossless data compression.</summary>
         </member>
@@ -482,6 +813,294 @@ IEnumerator implementation for ParameterCollection
             <summary>Baseclass for exceptions thrown by the Pylon library.</summary>
             <inheritdoc />
         </member>
+        <member name="P:Basler.Pylon.AviVideoWriter.ImageDataBytesWritten">
+$4D$
+<summary>Returns the number of image data written to the .avi file in bytes.</summary><remarks><para>
+This value is updated with each call to Write().
+The value does not include .avi header data.
+<returns> Returns the number of image data bytes that have been written to the file.
+Returns 0 if no images have been written yet.
+</returns></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.Write``1(``0[],Basler.Pylon.PixelType,System.Int32,System.Int32,System.Int32,Basler.Pylon.ImageOrientation)">
+$4D$
+<summary>Adds the image to the video.</summary><param name="pixelData">The data of the image to be written.</param><param name="pixelType">The pixel type of the image.</param><param name="width">Width of the image.</param><param name="height">Height of the image.</param><param name="paddingX">The number of extra data bytes at the end of each row in <c>pixelData</c></param><param name="orientation">Orientation of the image data in <c>pixelData</c>.</param><typeparam name="T">The data type of pixels stored in <c>pixelData</c>.</typeparam><remarks><para>
+If required, the image is automatically converted to the target format.
+</para><para>
+Preconditions
+<list type="bullet"><item>The file is open.</item><item>The pixel type of the image is supported by pylon.</item><item>The width and height of the image match the values passed when opening the video file.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.Write(Basler.Pylon.IImage)">
+$4D$
+<summary>Writes an image to the video.</summary><param name="image">The image to be added.</param><remarks><para>
+If required, the image is automatically converted to the target format.
+</para><pre>
+Preconditions
+<list type="bullet"><item>The file is open.</item><item>The image is valid.</item><item>The pixel type of the image is supported by pylon.</item><item>The width and height of the image match the values passed when opening the video file.</item></list></pre><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.CanWriteWithoutConversion(Basler.Pylon.PixelType,System.Int32,System.Int32,System.Int32,Basler.Pylon.ImageOrientation)">
+$4D$
+<summary>Checks whether the given data/image can be added to the video file without prior conversion.</summary><param name="pixelType">The pixel type of the image.</param><param name="width">Width of the image.</param><param name="height">Height of the image.</param><param name="paddingX">The number of extra data bytes at the end of each row.</param><param name="orientation">Orientation of the video. Most codecs support ImageOrientation.BottomUp only.</param><returns>Returns true if the image will added to the video stream without prior conversion when Write() is called.
+   Returns false if the image will be automatically converted when Write() is called.
+   Returns false if the image cannot be added at all. See the preconditions of Write() for more information.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.CanWriteWithoutConversion(Basler.Pylon.IImage)">
+$4D$
+<summary>Checks whether the image passed can be added to the video file without prior conversion.</summary><param name="image">Image or grabresult to check.</param><returns>Returns true if the image will added to the video stream without prior conversion when Write() is called.
+   Returns false if the image will be automatically converted when Write() is called.
+   Returns false if the image cannot be added at all. See the preconditions of Write() for more information.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.Close">
+$4D$
+<summary>Closes the file.</summary><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="P:Basler.Pylon.AviVideoWriter.IsOpen">
+$4D$
+<summary>Returns the open state of the video file.</summary><returns>Returns true if a file for video output has been opened.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.Create(System.String,System.Double,Basler.Pylon.PixelType,System.Int32,System.Int32,Basler.Pylon.ImageOrientation,System.String,System.Int32,System.Int32,System.Int32,System.Byte[]@,System.Boolean,System.IntPtr)">
+$4D$
+<summary>Creates and opens a file for video writing.</summary><param name="filename">Filen ame of the video file to be created. If the file doesn't have the .avi extension, it will be appended automatically. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="pixelType">The pixel type of the images that will be added to the video writer. This input is used to derive the video format. Mono images result in target PixelType.Mono8. Color images with alpha channnel result in target PixelType.BGRA8packed. Other color images result in target PixelType.BGR8packed.</param><param name="width">Width of the video.</param><param name="height">Height of the video.</param><param name="orientation">Orientation of the video. Most codecs support ImageOrientation.BottomUp only.</param><param name="fccHandler">The four-character code of the codec used for compression. This must be 4 characters or less. If you pass an empty string, the images will not be compressed.</param><param name="quality">Quality setting of the video. You can pass a value between 0 (worst quality) and 10000 (best quality).</param><param name="bytesPerSecond">Specifies the compressed bit rate. The value must be greater than 0. If you enter 0, auto keyframe insertion will be enabled.</param><param name="autoKeyFrameInsertionRate">Specifies that a key frame is inserted every nth image. For this to work, the <c>bytesPerSecond</c> parameter must be set to 0.</param><param name="compressionParams">Compression parameters to be used. On input, you can pass a null reference to use default compression parameters. If you pass an array, these values will be used. You can retrieve the array from a previous call to Create(). On successful return, the array will contain the parameters used to save the video.</param><param name="showDialog">If set to true, a codec configuration dialog will be displayed. The user can choose from available codecs and configure the selected codec.</param><param name="hParentWindow">If you set <c>showDialog</c> to true, you can pass a window handle to be used as the parent window for the configuration dialog. If you set <c>showDialog</c> to false, this value will be ignored.</param><returns>Returns true if the file was created successfully. Returns false if <c>showDialog</c> is set and the user clicked Cancel.</returns><remarks><para>
+If a file with the same name already exists, it will be overwritten.
+</para><para>
+You can pass an empty array for the <c>compressionOptions</c> parameter. The function will then use the default options.
+If you pass a non-empty array, all codec-specific options are used from the <c>compressionOptions</c> parameter passed. The <c>fccHandler</c>, <c>quality</c>, <c>bytesPerSecond</c>, and <c>autoKeyFrameInsertionRate</c> parameters will be ignored
+On successful return, the array will contain the compression options used to write the file. You can use the returned array in subsequent calls to Create to use the same options.
+</para><para>
+You can set the <c>showDialog</c> parameter to true. The function will then show a configuration dialog and allow the user to select and configure the codec used.
+If the user clicks OK, the settings will be stored in <c>compressionOptions</c> and the function will try to create the file and return true.
+If the user clicks Cancel, the function will return false.
+</para><para>
+Preconditions:
+<list type="bullet"><item>The file can be written to.</item><item>The Pixel type can be either PixelType.Mono8, PixelType.BGR8packed, or PixelType.BGRA8packed.</item><item><c>width</c> and <c>height</c> must be greater than 0.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.Create(System.String,System.Double,Basler.Pylon.ICamera)">
+$4D$
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. If the file doesn't have the .avi extension, it will be appended automatically. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="camera">The camera from which the current settings are read.</param><remarks><para>
+This overload reads the PixelType, Width, and Height parameters from the camera passed.
+Default compression options appropriate for the format will be used. 
+</para><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item>The camera must be open.</item><item>The pixel type can be either PixelType.Mono8, PixelType.BGR8packed, or PixelType.BGRA8packed.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="M:Basler.Pylon.AviVideoWriter.Create(System.String,System.Double,Basler.Pylon.PixelType,System.Int32,System.Int32)">
+$4D$
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. If the file doesn't have the .avi extension, it will be appended automatically. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="pixelType">The pixel type of the images that will be added to the video writer. This input is used to derive the video format. Mono images result in target PixelType.Mono8. Color images with alpha channnel result in target PixelType.BGRA8packed. Other color images result in target PixelType.BGR8packed.</param><param name="width">Width of the video.</param><param name="height">Height of the video.</param><remarks><para>
+Default compression options appropriate for the format will be used.
+</para><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item>Depending on the video format used not all pixel types may be supported.</item><item><c>width</c> and <c>height</c> must be greater than 0.</item><item>The pixel type can be either PixelType.Mono8, PixelType.BGR8packed, or PixelType.BGRA8packed.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="T:Basler.Pylon.AviVideoWriter">
+$4D$
+<summary>
+Provides a convenient way to save AVI video files using Video for Windows (VfW).
+</summary></member>
+        <member name="M:Basler.Pylon.PLVideoWriter.CompressionModeEnum.ToString">
+            <summary>The full name of CompressionMode</summary>
+            <returns>Returns the full name of CompressionMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.CompressionModeEnum.Name">
+            <summary>The full name of CompressionMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.CompressionModeEnum.Quality">
+            <summary>
+                <para>The resulting stream has a constant quality.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.CompressionModeEnum.Bitrate">
+            <summary>
+                <para>The resulting stream has a constant bit rate.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLVideoWriter.CompressionModeEnum">
+            <tocexclude />
+            <summary>Sets the compression mode. You can choose whether to keep the bit rate or the quality of the resulting video stream constant.</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.BytesWritten">
+            <summary>
+                <para>Bytes written to file since starting the recording.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.FrameCount">
+            <summary>
+                <para>Number of frames written since starting the recording.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.ThreadCount">
+            <summary>
+                <para>Number of threads used for recording the video.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.Bitrate">
+            <summary>
+                <para>Bit rate of the resulting compressed stream.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.Quality">
+            <summary>
+                <para>Quality of the resulting compressed stream. The quality has a direct influence on the resulting bit rate. The optimal bit rate is calculated based on the input values height, width, and playback frame rate (WIDTH * HEIGHT * PLAYBACKFRAMERATE * 0.25). This is then normalized to the quality value range 1-100, where 100 corresponds to the optimum bit rate and 1 to the lowest bit rate.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.CompressionMode">
+            <summary>
+                <para>Sets the compression mode. You can choose whether to keep the bit rate or the quality of the resulting video stream constant.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.PlaybackFrameRate">
+            <summary>
+                <para>Frame rate (in Hertz) of the video to be recorded.</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.Height">
+            <summary>
+                <para>Height of the image (in pixels).</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLVideoWriter.Width">
+            <summary>
+                <para>Width of the image (in pixels).</para>
+                <para>Applies to:  VideoWriter</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLVideoWriter">
+            <summary>List of all parameter names available for the video writer.</summary>
+        </member>
+        <member name="P:Basler.Pylon.VideoWriter.IsSupported">
+$4D$
+<summary>Checks if video writing is supported.</summary><remarks><para>
+Checks if all neccessary dynamic libraries are installed and can be loaded.
+This does not check if the codec for the video can be used. This is checked in Create().
+<returns> Returns true if supported (i.e. all DLLs are okay and can be loaded)
+</returns></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="P:Basler.Pylon.VideoWriter.Parameters">
+$4D$
+<summary>Returns the parameter collection of the video writer for accessing all parameters. Example: videowriter.Parameters[PLVideoWriter.BytesWritten].GetValue();</summary><returns>Returns the parameter collection of the video writer.</returns><remarks><para>
+You can use the parameter collection to configure the video writer through parameters.
+You can access parameters by their name or predefined parameter list.
+</para><para>
+Currently the only predefined parameter list is:
+<list type="bullet"><item>PLVideoWriter</item></list>
+For more information about the parameters, see the documentation for the parameter list.
+</para><para>
+You can access parameters by passing a key from a parameter list to the index operator, e.g.
+<code language="cs">
+videowriter.Parameters[PLVideoWriter.BytesWritten].GetValue();
+</code></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="P:Basler.Pylon.VideoWriter.ImageDataBytesWritten">
+$4D$
+<summary>Returns the amount of image data written to the video file in bytes.</summary><remarks><para>
+This value is updated with each call to Write().
+<returns> Returns the amount of image data bytes that have been written to the file.
+Returns 0 if no images have been written yet.
+</returns></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.Write``1(``0[],Basler.Pylon.PixelType,System.Int32,System.Int32,System.Int32,Basler.Pylon.ImageOrientation)">
+$4D$
+<summary>Writes the image to the video.</summary><param name="pixelData">The data of the image to be written.</param><param name="pixelType">The pixel type of the image.</param><param name="width">Width of the image.</param><param name="height">Height of the image.</param><param name="paddingX">The number of extra data bytes at the end of each row in <c>pixelData</c></param><param name="orientation">Orientation of the image data in <c>pixelData</c>.</param><typeparam name="T">The data type of pixels stored in <c>pixelData</c>.</typeparam><remarks><para>
+If required, the image is automatically converted to the target format.
+</para><para>
+Preconditions
+<list type="bullet"><item>The file is open.</item><item>The pixel type of the image is supported by pylon.</item><item>The width and height of the image match the values passed when opening the video file.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.Write(Basler.Pylon.IImage)">
+$4D$
+<summary>Writes an image to the video.</summary><param name="image">The image to be added.</param><remarks><para>
+If required, the image is automatically converted to the target format.
+</para><pre>
+Preconditions
+<list type="bullet"><item>The file is open.</item><item>The image is valid.</item><item>The pixel type of the image is supported by pylon.</item><item>The width and height of the image match the values passed when opening the video file.</item></list></pre><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.CanWriteWithoutConversion(Basler.Pylon.PixelType,System.Int32,System.Int32,System.Int32,Basler.Pylon.ImageOrientation)">
+$4D$
+<summary>Checks whether the given data/image can be added to the video file without prior conversion.</summary><param name="pixelType">The pixel type of the image.</param><param name="width">Width of the image.</param><param name="height">Height of the image.</param><param name="paddingX">The number of extra data bytes at the end of each row.</param><param name="orientation">Orientation of the video. Most codecs support ImageOrientation.BottomUp only.</param><returns>Returns true if the image will added to the video stream without prior conversion when Write() is called.
+   Returns false if the image will be automatically converted when Write() is called.
+   Returns false if the image cannot be added at all. See the preconditions of Write() for more information.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.CanWriteWithoutConversion(Basler.Pylon.IImage)">
+$4D$
+<summary>Checks whether the image passed can be added to the video file without prior conversion.</summary><param name="image">Image or grabresult to check.</param><returns>Returns true if the image will added to the video stream without prior conversion when Write() is called.
+   Returns false if the image will be automatically converted when Write() is called.
+   Returns false if the image cannot be added at all. See the preconditions of Write() for more information.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.Close">
+$4D$
+<summary>Closes the file.</summary><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="P:Basler.Pylon.VideoWriter.IsOpen">
+$4D$
+<summary>Returns the open state of the video file.</summary><returns>Returns true if a file for video output has been opened.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.Create(System.String,System.Double,Basler.Pylon.ICamera)">
+$4D$
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. If the file doesn't have the an extension, .mp4 will be appended automatically. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="camera">The camera from which the current settings are read.</param><remarks><para>
+This overload reads the PixelType, Width, and Height parameters from the camera passed.
+</para><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item>The camera must be open.</item><item>The pixel type must be supported by the image format converter.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.Create(System.String,System.Double,Basler.Pylon.PixelType,System.Int32,System.Int32,System.UInt32)">
+$4D$
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. If the file doesn't have the an extension, .mp4 will be appended automatically. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="pixelType">The pixel type of the images that will be added to the video writer. This input is used to derive the video format. Currently, the output is always YUV420p.</param><param name="width">Width of the video.</param><param name="height">Height of the video.</param><param name="quality">Quality of the video.</param><remarks><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item><c>pixelType</c> is supported by the image format converter.</item><item><c>width</c> and <c>height</c> must be greater than 0.</item><item><c>quality</c> must be in the range 1 ... 100.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.Create(System.String,System.Double,Basler.Pylon.PixelType,System.Int32,System.Int32)">
+$4D$
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. If the file doesn't have the an extension, .mp4 will be appended automatically. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="pixelType">The pixel type of the images that will be added to the video writer. This input is used to derive the video format. Currently, the output is always YUV420p.</param><param name="width">Width of the video.</param><param name="height">Height of the video.</param><remarks><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item><c>width</c> and <c>height</c> must be greater than 0.</item><item><c>pixelType</c> is supported by the image format converter.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="M:Basler.Pylon.VideoWriter.#ctor">
+$4D$
+<summary>Initializes a new instance of the VideoWriter class.</summary><remarks><para>
+Creates and initializes a new instance of the VideoWriter class.
+</para><para><b>Error safety:</b> Can throw exceptions.</para></remarks></member>
+        <member name="T:Basler.Pylon.VideoWriter">
+$4D$
+<summary>
+Provides a convenient way to save video files using the pylon Supplementary Package for MPEG-4.
+</summary></member>
+        <member name="M:Basler.Pylon.IVideoWriter.Write``1(``0[],Basler.Pylon.PixelType,System.Int32,System.Int32,System.Int32,Basler.Pylon.ImageOrientation)">
+!4D!
+<summary>Adds the image to the video. Converts the image to the correct format if required.</summary><param name="pixelData">The data of the image to be added.</param><param name="pixelType">The pixel type of the image.</param><param name="width">Width of the image.</param><param name="height">Height of the image.</param><param name="paddingX">The number of extra data bytes at the end of each row.</param><param name="orientation">Orientation of the video. Most codecs support ImageOrientation.BottomUp only.</param><typeparam name="T">The data type of pixels stored in <c>pixelData</c>.</typeparam><remarks><para>
+If required, the image is automatically converted to the target format.
+</para><para>
+Preconditions
+<list type="bullet"><item>Create() has been called successfully.</item><item>The image passed is valid.</item><item>The pixel type of the image to add is a format supported by pylon.</item><item>The <c>width</c> and <c>height</c> of the image match the values passed when opening the video file.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Throws an exception if the image cannot be added.</para></remarks></member>
+        <member name="M:Basler.Pylon.IVideoWriter.Write(Basler.Pylon.IImage)">
+$4D$
+<summary>Adds the image to the video. Converts the image to the correct format if required.</summary><param name="image">The image to be added.</param><remarks><para>
+If required, the image is automatically converted to the target format.
+</para><para>
+Preconditions
+<list type="bullet"><item>Create() has been called successfully.</item><item>The image passed is valid.</item><item>The pixel type of the image to add is a format supported by pylon.</item><item>The <c>width</c> and <c>height</c> of the image match the values passed when opening the video file.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Throws an exception if the image cannot be added.</para></remarks></member>
+        <member name="M:Basler.Pylon.IVideoWriter.CanWriteWithoutConversion(Basler.Pylon.PixelType,System.Int32,System.Int32,System.Int32,Basler.Pylon.ImageOrientation)">
+$4D$
+<summary>Checks whether the given data/image can be added to the video file without prior conversion.</summary><param name="pixelType">The pixel type of the image.</param><param name="width">Width of the image.</param><param name="height">Height of the image.</param><param name="paddingX">The number of extra data bytes at the end of each row.</param><param name="orientation">Orientation of the image.</param><returns>Returns true if the image can be added to the video stream without prior conversion.
+   Returns false if the image would be automatically converted when Write() is called.
+   Returns false if the image cannot be added at all. See the preconditions of Write() for more information.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para></remarks></member>
+        <member name="M:Basler.Pylon.IVideoWriter.CanWriteWithoutConversion(Basler.Pylon.IImage)">
+$4D$
+<summary>Checks whether the given image can be added to the video file without prior conversion.</summary><param name="image">The image to be checked.</param><returns>Returns true if the image can be added to the video stream without prior conversion.
+   Returns false if the image would be automatically converted when Write() is called.
+   Returns false if the image cannot be added at all. See the preconditions of Write() for more information.</returns><para><b>Thread safety:</b> This method is thread-safe.</para><remarks /></member>
+        <member name="M:Basler.Pylon.IVideoWriter.Close">
+$4D$
+<summary>Closes the file.</summary><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="P:Basler.Pylon.IVideoWriter.IsOpen">
+$4D$
+<summary>Returns the open state of the video file.</summary><returns>Returns true if a file for video output has been opened.</returns><remarks><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Does not throw exceptions.</para></remarks></member>
+        <member name="M:Basler.Pylon.IVideoWriter.Create(System.String,System.Double,Basler.Pylon.ICamera)">
+!4D!
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="camera">The camera from which the current settings are read.</param><remarks><para>
+This overload reads the PixelType, Width, and Height parameters from the camera passed.
+Default compression options appropriate for the format will be chosen. 
+</para><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item>The camera must be open.</item><item>Depending on the video format used, not all pixel types may be supported.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="M:Basler.Pylon.IVideoWriter.Create(System.String,System.Double,Basler.Pylon.PixelType,System.Int32,System.Int32)">
+!4D!
+<summary>Creates and opens a file for video writing.</summary><param name="filename">File name of the video file to be created. Existing files will be overwritten.</param><param name="playbackFramesPerSecond">Playback speed in frames per second.</param><param name="pixelType">The pixel type of the images that will be added to the video writer. This input is used to derive the video format.</param><param name="width">Width of the video.</param><param name="height">Height of the video.</param><remarks><para>
+Default compression options appropriate for the format will be used.
+</para><para>
+Preconditions:
+<list type="bullet"><item>The file is writable.</item><item>Depending on the video format used, not all pixel types may be supported.</item><item><c>width</c> and <c>height</c> must be greater than 0.</item></list></para><para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the file cannot be created successfully or the preconditions are not met.</para></remarks></member>
+        <member name="T:Basler.Pylon.IVideoWriter">
+$4D$
+<summary>
+Provides a convenient way to save video files.
+</summary></member>
         <member name="M:Basler.Pylon.Library.ContainsTransportLayer(System.String)">
             <summary>
 Indicates if the library contains the transport layer identified by the device type.
@@ -501,6 +1120,14 @@ The static class <see cref="T:Basler.Pylon.DeviceType" /> provides a list of pos
                 <para>
                     <b>Error safety:</b> Does not throw exceptions.</para>
             </remarks>
+        </member>
+        <member name="M:Basler.Pylon.Library.SetProperty(System.Int32,System.Byte[])">
+            <summary> Sets a property in pylon. </summary>
+            <param name="propertyId">Identifier of the property.</param>
+            <param name="data">Array with the value of the property.</param>
+            <remarks>
+Call this function to set the value of a property.
+<para><b>Thread safety:</b> This method is thread-safe.</para><para><b>Error safety:</b> Can throw exceptions if the property could not be set.</para></remarks>
         </member>
         <member name="M:Basler.Pylon.Library.EnumerateTransportLayers">
             <summary> Searches for information about available transport layers. </summary>
@@ -559,24 +1186,6 @@ unloaded.
 </para>
             </remarks>
         </member>
-        <member name="P:Basler.Pylon.DeviceType.GenTLConsumer">
-            <summary>The Basler Camera Emu device type.</summary>
-        </member>
-        <member name="P:Basler.Pylon.DeviceType.CameraLink">
-            <summary>The Basler Camera Link device type.</summary>
-        </member>
-        <member name="P:Basler.Pylon.DeviceType.IEEE1394">
-            <summary>The Basler IEEE 1394 device type.</summary>
-        </member>
-        <member name="P:Basler.Pylon.DeviceType.GigE">
-            <summary>The Basler GigE device type.</summary>
-        </member>
-        <member name="P:Basler.Pylon.DeviceType.Usb">
-            <summary>The Basler USB device type.</summary>
-        </member>
-        <member name="T:Basler.Pylon.DeviceType">
-            <summary>Lists common device types.</summary>
-        </member>
         <member name="T:Basler.Pylon.zzzReserved">
             <exclude />
         </member>
@@ -595,13 +1204,13 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.MonoConversionMethodEnum.Truncate">
             <summary>
-                <para>Image data is shifted when using this conversion method. If the input format has a higher bit depth than the target output format then the least significant bits of the input pixel values are truncated as required. The data alignment can be controlled using the OutputBitAlignment parameter if the bit depth of the input format is lower than the bit depth of the output format. The AdditionalLeftShift parameter can be used to shift the input value additionally to the left or to the right.</para>
+                <para>When converting images, image data is shifted. If the target bit depth is lower than the source bit depth, the least significant bits of the input pixel values are truncated. If the target bit depth is greater than the source bit depth, you can control the data alignment with the Output Bit Alignment parameter. You can use the Additional Left Shift parameter to additionally shift the input value further to the left or to the right.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.MonoConversionMethodEnum.Gamma">
             <summary>
-                <para>Gamma conversion is used to convert from input to output format.</para>
+                <para>When converting images, Gamma conversion is used.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
@@ -618,25 +1227,25 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.InconvertibleEdgeHandlingEnum.Extend">
             <summary>
-                <para>Rows and columns that cannot be converted are extrapolated from the image.</para>
+                <para>Rows and columns that can't be converted are filled by extrapolating image data from neighboring rows and columns.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.InconvertibleEdgeHandlingEnum.Clip">
             <summary>
-                <para>Rows and columns that cannot be converted are removed from the output image</para>
+                <para>Rows and columns that can't be converted are removed from the output image.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.InconvertibleEdgeHandlingEnum.SetZero">
             <summary>
-                <para>Rows and columns that cannot be converted are set to zero.</para>
+                <para>Rows and columns that can't be converted are set to zero.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLPixelDataConverter.InconvertibleEdgeHandlingEnum">
             <tocexclude />
-            <summary>Sets the handling for rows and columns that cannot be converted.</summary>
+            <summary>Sets how to handle rows and columns that can't be converted.</summary>
         </member>
         <member name="M:Basler.Pylon.PLPixelDataConverter.OutputOrientationEnum.ToString">
             <summary>The full name of OutputOrientation</summary>
@@ -659,13 +1268,13 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.OutputOrientationEnum.Unchanged">
             <summary>
-                <para>The orientation of the image is not changed. The orientation is taken from the source image.</para>
+                <para>The orientation of the image remains the same. The orientation is taken from the source image.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLPixelDataConverter.OutputOrientationEnum">
             <tocexclude />
-            <summary>Defines the vertical orientation of the output image in memory.</summary>
+            <summary>Sets the vertical orientation of the output image in the buffer.</summary>
         </member>
         <member name="M:Basler.Pylon.PLPixelDataConverter.OutputBitAlignmentEnum.ToString">
             <summary>The full name of OutputBitAlignment</summary>
@@ -676,29 +1285,29 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.OutputBitAlignmentEnum.MsbAligned">
             <summary>
-                <para>The data is aligned at the most significant bit.</para>
+                <para>Image data is aligned with the most significant bit.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.OutputBitAlignmentEnum.LsbAligned">
             <summary>
-                <para>The data is aligned at the least significant bit.</para>
+                <para>Image data is aligned with the least significant bit.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLPixelDataConverter.OutputBitAlignmentEnum">
             <tocexclude />
-            <summary>Controls the alignment of the bits in the target pixel type if the target value has more bits than the source value.</summary>
+            <summary>Sets the alignment of the bits in the target pixel type if the target bit depth is greater than the source bit depth, e.g., if you are converting from a 10-bit to a 16-bit format.</summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.AdditionalLeftShift">
             <summary>
-                <para>Sets the value for additional shifting when converting monochrome images in Truncate mode. The image data is converted using a lookup table if the parameter value differs from zero. Shifted values exceeding the maximum output value boundary are set to the maximum allowed value. Negative values are treated as right shifted values.</para>
+                <para>Additional shifting value used for converting monochrome images. Only effective if the Mono Conversion Method parameter is set to Truncate. If the parameter value isn't zero, the image data is converted using a lookup table. Shifted values exceeding the maximum output value boundary are set to the maximum allowed value. Negative values are treated as right-shifted values.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.Gamma">
             <summary>
-                <para>Sets the gamma value for converting monochrome images.	The image data is converted using a lookup table. The values of the lookup table are computed using the following formula: valueOut = min((((valueIn ^ Gamma) / (valueInMax ^ Gamma)) * valueOutMax), valueOutMax).</para>
+                <para>Gamma value for converting monochrome images. The image data is converted using a lookup table.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
@@ -710,25 +1319,25 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.InconvertibleEdgeHandling">
             <summary>
-                <para>Sets the handling for rows and columns that cannot be converted.</para>
+                <para>Sets how to handle rows and columns that can't be converted.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.OutputOrientation">
             <summary>
-                <para>Defines the vertical orientation of the output image in memory.</para>
+                <para>Sets the vertical orientation of the output image in the buffer.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.OutputPaddingX">
             <summary>
-                <para>The number of additional data bytes at the end of each line. These bytes are set to zero during the conversion.</para>
+                <para>Number of additional data bytes at the end of each line. These bytes are set to zero during the conversion.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLPixelDataConverter.OutputBitAlignment">
             <summary>
-                <para>Controls the alignment of the bits in the target pixel type if the target value has more bits than the source value.</para>
+                <para>Sets the alignment of the bits in the target pixel type if the target bit depth is greater than the source bit depth, e.g., if you are converting from a 10-bit to a 16-bit format.</para>
                 <para>Applies to:  PixelDataConverter</para>
             </summary>
         </member>
@@ -737,37 +1346,37 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigETransportLayer.StatisticReadWriteTimeoutCount">
             <summary>
-                <para>Counts the number of timeouts in read and write operations when waiting for the response from the device.</para>
+                <para>Number of timeouts during read and write operations when waiting for a response from the device.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigETransportLayer.CommandDuplicationEnable">
             <summary>
-                <para>This feature enables the duplication of commands. This option should only be enabled in case of network problems.</para>
+                <para>Enables sending all commands and receiving all acknowledges twice. This option should only be enabled in case of network problems.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigETransportLayer.HeartbeatTimeout">
             <summary>
-                <para>Heartbeat timeout value in milliseconds.</para>
+                <para>Heartbeat timeout value on the host side in milliseconds.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigETransportLayer.MaxRetryCountWrite">
             <summary>
-                <para>Maximum number of retries for write operations after a write operation timed out.</para>
+                <para>Maximum number of retries for write operations after a write operation has timed out.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigETransportLayer.MaxRetryCountRead">
             <summary>
-                <para>Maximum number of retries for read operations after a read operation timed out.</para>
+                <para>Maximum number of retries for read operations after a read operation has timed out.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigETransportLayer.WriteTimeout">
             <summary>
-                <para>Write access timeout value in milliseconds.</para>
+                <para>Write access timeout in milliseconds.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -782,43 +1391,43 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.Statistic_Last_Error_Status_Text">
             <summary>
-                <para>The message text of the last error status for a read or write operation.</para>
+                <para>Last error status of a read or write operation.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.Statistic_Last_Error_Status">
             <summary>
-                <para>The last error status for a read or write operation.</para>
+                <para>Last error status of a read or write operation.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.Statistic_Write_Operations_Failed_Count">
             <summary>
-                <para>The total count of failed write operations.</para>
+                <para>Number of failed write operations.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.Statistic_Read_Operations_Failed_Count">
             <summary>
-                <para>The total count of failed read operations.</para>
+                <para>Number of failed read operations.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.Statistic_Write_Pipe_Reset_Count">
             <summary>
-                <para>The total count of write pipe resets.</para>
+                <para>Number of write pipe resets.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.Statistic_Read_Pipe_Reset_Count">
             <summary>
-                <para>The total count of read pipe resets.</para>
+                <para>Number of read pipe resets.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbTransportLayer.MigrationModeEnable">
             <summary>
-                <para>Maps certain SFNC1.X node names to compatible nodes when enabled.</para>
+                <para>Enables mapping of certain SFNC 1.x node names to SFNC 2.x node names.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -827,79 +1436,79 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.Statistic_Last_Error_Status_Text">
             <summary>
-                <para>The message text of the last error status for a read or write operation.</para>
+                <para>Last error status of a read or write operation.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.Statistic_Last_Error_Status">
             <summary>
-                <para>The last error status for a read or write operation.</para>
+                <para>Last error status of a read or write operation.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.Statistic_Write_Operations_Failed_Count">
             <summary>
-                <para>The total count of failed write operations.</para>
+                <para>Number of failed write operations.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.Statistic_Read_Operations_Failed_Count">
             <summary>
-                <para>The total count of failed read operations.</para>
+                <para>Number of failed read operations.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.Statistic_Write_Pipe_Reset_Count">
             <summary>
-                <para>The total count of write pipe resets.</para>
+                <para>Number of write pipe resets.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.Statistic_Read_Pipe_Reset_Count">
             <summary>
-                <para>The total count of read pipe resets.</para>
+                <para>Number of read pipe resets.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.MigrationModeEnable">
             <summary>
-                <para>Maps certain SFNC1.X node names to compatible nodes when enabled.</para>
+                <para>Enables mapping of certain SFNC 1.x node names to SFNC 2.x node names.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.StatisticReadWriteTimeoutCount">
             <summary>
-                <para>Counts the number of timeouts in read and write operations when waiting for the response from the device.</para>
+                <para>Number of timeouts during read and write operations when waiting for a response from the device.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.CommandDuplicationEnable">
             <summary>
-                <para>This feature enables the duplication of commands. This option should only be enabled in case of network problems.</para>
+                <para>Enables sending all commands and receiving all acknowledges twice. This option should only be enabled in case of network problems.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.HeartbeatTimeout">
             <summary>
-                <para>Heartbeat timeout value in milliseconds.</para>
+                <para>Heartbeat timeout value on the host side in milliseconds.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.MaxRetryCountWrite">
             <summary>
-                <para>Maximum number of retries for write operations after a write operation timed out.</para>
+                <para>Maximum number of retries for write operations after a write operation has timed out.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.MaxRetryCountRead">
             <summary>
-                <para>Maximum number of retries for read operations after a read operation timed out.</para>
+                <para>Maximum number of retries for read operations after a read operation has timed out.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLTransportLayer.WriteTimeout">
             <summary>
-                <para>Write access timeout value in milliseconds.</para>
+                <para>Write access timeout in milliseconds.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -1403,19 +2012,31 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TransmissionTypeEnum.SubnetDirectedBroadcast">
             <summary>
-                <para>The subnet broadcast address is obtained by performing a bitwise OR between the bit complement of the subnet mask and the network IP address (e.g. IP: 169.254.0.0, Netmask 169.254.0.0 -&gt; Broadcast: 169.254.255.255).</para>
+                <para>The stream data is sent to all devices in the same subnet as the camera. The subnet broadcast address is obtained by performing a bitwise OR operation between the camera's IP address (Destination IP Address parameter) and the bit complement of the subnet mask.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TransmissionTypeEnum.LimitedBroadcast">
             <summary>
-                <para>This broadcast is 'limited' in the sense that it does not reach any device on the Internet.</para>
+                <para>The stream data is sent to all devices in the local area network (255.255.255.255).</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TransmissionTypeEnum.Multicast">
             <summary>
-                <para>In order to use multicasting, you have to specify an IP multicast group address in the 'IP address' field (224.0.0.0 to 239.255.255.255). Keep in mind that some multicast addresses are reserved. The address range from 239.255.0.0 to 239.255.255.255 is assigned by RFC 2365 as a locally administered address space. Use one of these addresses if you are not sure.</para>
+                <para>The stream data is sent to selected devices in the local network.Â The Destination IP Address parameter must be set to a multicast group address (224.0.0.0 to 239.255.255.255). Some addresses in this range are reserved. If you are unsure, use an address between 239.255.0.0 and 239.255.255.255. This range is assigned by RFC 2365 as a locally administered address space. </para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigEStream.TransmissionTypeEnum.Unicast">
+            <summary>
+                <para>The stream data is sent to a single device in the local network.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigEStream.TransmissionTypeEnum.UseCameraConfig">
+            <summary>
+                <para>The stream transmission configuration is read from the camera. Use this option only if you want to set up a monitoring application.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -1532,7 +2153,7 @@ unloaded.
         </member>
         <member name="T:Basler.Pylon.PLGigEStream.AccessModeEnum">
             <tocexclude />
-            <summary>Camera access mode.</summary>
+            <summary>Indicates the mode of access the current application has to the device.</summary>
         </member>
         <member name="M:Basler.Pylon.PLGigEStream.StatusEnum.ToString">
             <summary>The full name of Status</summary>
@@ -1543,31 +2164,31 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.StatusEnum.Locked">
             <summary>
-                <para>The low level stream grabber is locked.</para>
+                <para>The stream grabber is locked.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.StatusEnum.Open">
             <summary>
-                <para>The low level stream grabber is open.</para>
+                <para>The stream grabber is open.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.StatusEnum.Closed">
             <summary>
-                <para>The low level stream grabber is closed.</para>
+                <para>The stream grabber is closed.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.StatusEnum.NotInitialized">
             <summary>
-                <para>The low level stream grabber is not initialized.</para>
+                <para>The stream grabber is not initialized.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLGigEStream.StatusEnum">
             <tocexclude />
-            <summary>Shows the current stream grabber status.</summary>
+            <summary>Indicates the current status of the stream grabber.</summary>
         </member>
         <member name="M:Basler.Pylon.PLGigEStream.TypeEnum.ToString">
             <summary>The full name of Type</summary>
@@ -1578,13 +2199,13 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TypeEnum.NoDriverAvailable">
             <summary>
-                <para>Indicates that no suitable driver is installed.</para>
+                <para>No suitable driver is installed.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLGigEStream.TypeEnum">
             <tocexclude />
-            <summary>Selects the driver type to be used.</summary>
+            <summary>Sets the driver type to be used by the stream grabber.</summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.DestinationPort">
             <summary>
@@ -1618,7 +2239,7 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.DestinationAddr">
             <summary>
-                <para>The camera will sent all stream data to this IP address. For more details see 'TransmissionType' feature.</para>
+                <para>IP address to which the stream grabber sends all stream data.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -1706,91 +2327,91 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Resend_Packet_Count">
             <summary>
-                <para>Counts the number of packets requested by PACKETRESEND commands.</para>
+                <para>Number of packets requested by packet resend commands.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Resend_Request_Count">
             <summary>
-                <para>Counts the number of emitted PACKETRESEND commands.</para>
+                <para>Number of emitted packet resend commands sent.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Failed_Packet_Count">
             <summary>
-                <para>Counts the number of failed packets (status != success).</para>
+                <para>Number of failed packets.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Total_Packet_Count">
             <summary>
-                <para>Counts the number of received packets.</para>
+                <para>Number of packets received.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Buffer_Underrun_Count">
             <summary>
-                <para>Counts the number of frames lost because there were no buffers queued to the driver.</para>
+                <para>Number of frames lost because there were no buffers in the queue.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Failed_Buffer_Count">
             <summary>
-                <para>Counts the number of buffers with at least one failed packet (status != success).</para>
+                <para>GigE cameras: Number of buffers with at least one failed packet. A packet is considered failed if its status is not 'success'. Other cameras: Number of buffers that returned with an error status. </para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Statistic_Total_Buffer_Count">
             <summary>
-                <para>Counts the number of received frames.</para>
+                <para>GigE cameras: Number of frames received. Other cameras: Number of buffers processed.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TypeIsSocketDriverAvailable">
             <summary>
-                <para>Specifies whether the socket driver is currently available.</para>
+                <para>Indicates whether the socket driver is currently available.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TypeIsWindowsFilterDriverAvailable">
             <summary>
-                <para>Specifies whether the Pylon GigE Vision Streaming Filter Driver is currently available.</para>
+                <para>Indicates whether the pylon GigE Vision Filter Driver is currently available.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.TypeIsWindowsIntelPerformanceDriverAvailable">
             <summary>
-                <para>Specifies whether the Pylon GigE Vision Performance Driver for Intel network controllers is currently available.</para>
+                <para>Indicates whether the pylon GigE Vision Performance Driver is currently available.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.AccessMode">
             <summary>
-                <para>Camera access mode.</para>
+                <para>Indicates the mode of access the current application has to the device.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Status">
             <summary>
-                <para>Shows the current stream grabber status.</para>
+                <para>Indicates the current status of the stream grabber.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.SocketBufferSize">
             <summary>
-                <para>The socket buffer size in KB.</para>
+                <para>Socket buffer size in kilobytes.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ReceiveThreadPriority">
             <summary>
-                <para>This value sets the absolute thread priority of the receive thread.</para>
+                <para>Thread priority of the receive thread. Only available if the socket driver is used. To assign the priority, the Receive Thread Priority Override parameter must be set to true.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ReceiveThreadPriorityOverride">
             <summary>
-                <para>If enabled, the user can set a custom priority of the receive thread.</para>
+                <para>Enables assigning a custom priority to the thread which receives incoming stream packets.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -1809,37 +2430,37 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.MaximumNumberResendRequests">
             <summary>
-                <para>Maximum number of resend requests per packet.</para>
+                <para>Maximum number of resend requests per missing packet.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ResendRequestResponseTimeout">
             <summary>
-                <para>Timeout in milliseconds for missing resend responses.</para>
+                <para>Time to wait (in milliseconds) between sending a resend request and considering the request as lost.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ResendTimeout">
             <summary>
-                <para>Time in milliseconds to wait until a resend request is issued.</para>
+                <para>Time to wait (in milliseconds) between detecting a missing packet and sending a resend request.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ResendRequestBatching">
             <summary>
-                <para>Additional resend batching as percentage of threshold.</para>
+                <para>Amount of packet resend requests to be batched, i.e., sent together.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ResendRequestThreshold">
             <summary>
-                <para>Resend threshold as percentage of receive window.</para>
+                <para>Threshold after which resend requests are initiated.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.ReceiveWindowSize">
             <summary>
-                <para>Size of the sliding receive window in number of frames.</para>
+                <para>Size (in frames) of the receive window in which the stream grabber looks for missing packets.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -1890,19 +2511,19 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.MaxBufferSize">
             <summary>
-                <para>The maximum buffer size in bytes that can be registered.</para>
+                <para>Maximum size (in bytes) of a buffer used for grabbing images.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.MaxNumBuffer">
             <summary>
-                <para>The maximum number of buffers that can be used simultaneously.</para>
+                <para>Maximum number of buffers that can be used simultaneously for grabbing images.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigEStream.Type">
             <summary>
-                <para>Selects the driver type to be used.</para>
+                <para>Sets the driver type to be used by the stream grabber.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -2779,6 +3400,12 @@ unloaded.
         </member>
         <member name="P:Basler.Pylon.PLGigECamera.ExpertFeatureAccessSelectorEnum.Name">
             <summary>The full name of ExpertFeatureAccessSelector</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ExpertFeatureAccessSelectorEnum.ExpertFeature10">
+            <summary>
+                <para>Expert Feature 10 can be configured.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
         </member>
         <member name="P:Basler.Pylon.PLGigECamera.ExpertFeatureAccessSelectorEnum.ExpertFeature9">
             <summary>
@@ -5734,6 +6361,88 @@ unloaded.
             <tocexclude />
             <summary>This enumeration sets the image acquisition mode. </summary>
         </member>
+        <member name="M:Basler.Pylon.PLGigECamera.ROIZoneModeEnum.ToString">
+            <summary>The full name of ROIZoneMode</summary>
+            <returns>Returns the full name of ROIZoneMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneModeEnum.Name">
+            <summary>The full name of ROIZoneMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneModeEnum.On">
+            <summary>
+                <para>Enables the previously set ROI zone.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneModeEnum.Off">
+            <summary>
+                <para>Disables the previously set ROI zone.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLGigECamera.ROIZoneModeEnum">
+            <tocexclude />
+            <summary>Provides for enabling/disabling the previously set ROI zone.</summary>
+        </member>
+        <member name="M:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.ToString">
+            <summary>The full name of ROIZoneSelector</summary>
+            <returns>Returns the full name of ROIZoneSelector</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Name">
+            <summary>The full name of ROIZoneSelector</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone7">
+            <summary>
+                <para>Sets vertical ROI zone 7 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone6">
+            <summary>
+                <para>Sets vertical ROI zone 6 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone5">
+            <summary>
+                <para>Sets vertical ROI zone 5 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone4">
+            <summary>
+                <para>Sets vertical ROI zone 4 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone3">
+            <summary>
+                <para>Sets vertical ROI zone 3 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone2">
+            <summary>
+                <para>Sets vertical ROI zone 2 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone1">
+            <summary>
+                <para>Sets vertical ROI zone 1 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum.Zone0">
+            <summary>
+                <para>Sets vertical ROI zone 0 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLGigECamera.ROIZoneSelectorEnum">
+            <tocexclude />
+            <summary>Sets a ROI zone to be enabled, configured, and assembled with other ROI zones.</summary>
+        </member>
         <member name="M:Basler.Pylon.PLGigECamera.BinningModeVerticalEnum.ToString">
             <summary>The full name of BinningModeVertical</summary>
             <returns>Returns the full name of BinningModeVertical</returns>
@@ -5849,6 +6558,29 @@ unloaded.
             <tocexclude />
             <summary>This enumeration sets the vertical binning feature.</summary>
         </member>
+        <member name="M:Basler.Pylon.PLGigECamera.PgiModeEnum.ToString">
+            <summary>The full name of PgiMode</summary>
+            <returns>Returns the full name of PgiMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.PgiModeEnum.Name">
+            <summary>The full name of PgiMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.PgiModeEnum.On">
+            <summary>
+                <para>Basler PGI image optimizations are enabled.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.PgiModeEnum.Off">
+            <summary>
+                <para>Basler PGI image optimizations are disabled.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLGigECamera.PgiModeEnum">
+            <tocexclude />
+            <summary>Enables Basler PGI image optimizations.</summary>
+        </member>
         <member name="M:Basler.Pylon.PLGigECamera.DemosaicingModeEnum.ToString">
             <summary>The full name of DemosaicingMode</summary>
             <returns>Returns the full name of DemosaicingMode</returns>
@@ -5871,6 +6603,29 @@ unloaded.
         <member name="T:Basler.Pylon.PLGigECamera.DemosaicingModeEnum">
             <tocexclude />
             <summary>Sets the demosaicing mode.</summary>
+        </member>
+        <member name="M:Basler.Pylon.PLGigECamera.BslContrastModeEnum.ToString">
+            <summary>The full name of BslContrastMode</summary>
+            <returns>Returns the full name of BslContrastMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslContrastModeEnum.Name">
+            <summary>The full name of BslContrastMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslContrastModeEnum.SCurve">
+            <summary>
+                <para>SCurve contrast enhancement is used to adjust the contrast. It improves the perceived contrast while preserving the dynamic range of the image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslContrastModeEnum.Linear">
+            <summary>
+                <para>Linear contrast enhancement is used to adjust the contrast.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLGigECamera.BslContrastModeEnum">
+            <tocexclude />
+            <summary>Sets the Contrast Mode.</summary>
         </member>
         <member name="M:Basler.Pylon.PLGigECamera.ColorAdjustmentSelectorEnum.ToString">
             <summary>The full name of ColorAdjustmentSelector</summary>
@@ -9719,6 +10474,30 @@ Note: The maximum number of triggers within a burst sequence is limited. If the 
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneOffset">
+            <summary>
+                <para>Sets the ROI zone offset (pixels, in direction of assembly) for the previously enabled ROI zone. Equivalent to OffsetY for vertical zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSize">
+            <summary>
+                <para>Sets the ROI zone 'thickness' (pixels, in direction of assembly) for the previously enabled ROI zone. Equivalent to Height for vertical zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneMode">
+            <summary>
+                <para>Provides for enabling/disabling the previously set ROI zone.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.ROIZoneSelector">
+            <summary>
+                <para>Sets a ROI zone to be enabled, configured, and assembled with other ROI zones.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
         <member name="P:Basler.Pylon.PLGigECamera.ScalingVerticalAbs">
             <summary>
                 <para>This is a float value that sets the vertical scaling factor of the image.</para>
@@ -9845,9 +10624,69 @@ Note: The maximum number of triggers within a burst sequence is limited. If the 
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
+        <member name="P:Basler.Pylon.PLGigECamera.PgiMode">
+            <summary>
+                <para>Enables Basler PGI image optimizations.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
         <member name="P:Basler.Pylon.PLGigECamera.DemosaicingMode">
             <summary>
                 <para>Sets the demosaicing mode.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslContrastMode">
+            <summary>
+                <para>Sets the Contrast Mode.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslContrastRaw">
+            <summary>
+                <para>Adjusting the contrast increases the difference between light and dark areas in the image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslContrast">
+            <summary>
+                <para>Adjusting the contrast increases the difference between light and dark areas in the image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslBrightnessRaw">
+            <summary>
+                <para>Adjusting the brightness lightens or darkens the entire image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslBrightness">
+            <summary>
+                <para>Adjusting the brightness lightens or darkens the entire image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslSaturationRaw">
+            <summary>
+                <para>Adjusting the saturation changes the intensity of the colors. A higher saturation, for example, makes colors easier to distinguish.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslSaturation">
+            <summary>
+                <para>Adjusting the saturation changes the intensity of the colors. A higher saturation, for example, makes colors easier to distinguish.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslHueRaw">
+            <summary>
+                <para>Adjusting the hue shifts the colors of the image. This can be useful, e.g., for correcting minor color shifts or creating false-color images.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLGigECamera.BslHue">
+            <summary>
+                <para>Adjusting the hue shifts the colors of the image. This can be useful, e.g., for correcting minor color shifts or creating false-color images.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -10371,63 +11210,61 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Last_Block_Id">
             <summary>
-                <para>The last grabbed block ID.</para>
+                <para>Last grabbed block ID.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Resynchronization_Count">
             <summary>
-                <para>The count of stream resynchronizations.</para>
+                <para>Number of stream resynchronizations.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Missed_Frame_Count">
             <summary>
-                <para>The count of bad or missed frames between successfully grabbed images.</para>
+                <para>Number of corrupt or lost frames between successfully grabbed images.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Last_Failed_Buffer_Status_Text">
             <summary>
-                <para>The message text of the status code of the last failed buffer.</para>
+                <para>Status code of the last failed buffer.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Last_Failed_Buffer_Status">
             <summary>
-                <para>The status code of the last failed buffer.</para>
+                <para>Status code of the last failed buffer.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Failed_Buffer_Count">
             <summary>
-                <para>The count of buffers that returned with an error status.</para>
+                <para>GigE cameras: Number of buffers with at least one failed packet. A packet is considered failed if its status is not 'success'. Other cameras: Number of buffers that returned with an error status. </para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.Statistic_Total_Buffer_Count">
             <summary>
-                <para>The total count of processed buffers.</para>
+                <para>GigE cameras: Number of frames received. Other cameras: Number of buffers processed.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.TransferTimeout">
             <summary>
-                <para>
-   Timeout in ms for payload and trailer transfers.
-   </para>
+                <para>Timeout for payload and trailer transfers in milliseconds.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.TransferLoopThreadPriority">
             <summary>
-                <para>The priority of the thread that handles USB requests of the stream interface.</para>
+                <para>Priority of the thread that handles USB requests from the stream interface.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.NumMaxQueuedUrbs">
             <summary>
-                <para>The maximum number of requests to be enqueued to the driver.</para>
+                <para>Maximum number of USB request blocks (URBs) to be enqueued simultaneously.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -10446,13 +11283,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.MaxBufferSize">
             <summary>
-                <para>The maximum buffer size in bytes that can be registered.</para>
+                <para>Maximum size (in bytes) of a buffer used for grabbing images.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbStream.MaxNumBuffer">
             <summary>
-                <para>The maximum number of buffers that can be used simultaneously.</para>
+                <para>Maximum number of buffers that can be used simultaneously for grabbing images.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -10479,13 +11316,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLUsbEventGrabber.TransferLoopThreadPriority">
             <summary>
-                <para>The priority of the thread that handles USB requests of the event stream interface.</para>
+                <para>Priority of the thread that handles USB requests from the stream interface.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbEventGrabber.NumMaxQueuedUrbs">
             <summary>
-                <para>The maximum number of requests to be enqueued to the driver.</para>
+                <para>Maximum number of USB request blocks (URBs) to be enqueued simultaneously.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -10650,6 +11487,12 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLUsbCamera.ExpertFeatureAccessSelectorEnum.Name">
             <summary>The full name of ExpertFeatureAccessSelector</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ExpertFeatureAccessSelectorEnum.ExpertFeature10">
+            <summary>
+                <para>Expert Feature 10 can be configured.</para>
+                <para>Applies to:  USB</para>
+            </summary>
         </member>
         <member name="P:Basler.Pylon.PLUsbCamera.ExpertFeatureAccessSelectorEnum.ExpertFeature9">
             <summary>
@@ -12283,6 +13126,29 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
             <tocexclude />
             <summary>Sets the image acquisition mode.</summary>
         </member>
+        <member name="M:Basler.Pylon.PLUsbCamera.PgiModeEnum.ToString">
+            <summary>The full name of PgiMode</summary>
+            <returns>Returns the full name of PgiMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.PgiModeEnum.Name">
+            <summary>The full name of PgiMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.PgiModeEnum.On">
+            <summary>
+                <para>Basler PGI image optimizations are enabled.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.PgiModeEnum.Off">
+            <summary>
+                <para>Basler PGI image optimizations are disabled.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLUsbCamera.PgiModeEnum">
+            <tocexclude />
+            <summary>Enables Basler PGI image optimizations.</summary>
+        </member>
         <member name="M:Basler.Pylon.PLUsbCamera.DemosaicingModeEnum.ToString">
             <summary>The full name of DemosaicingMode</summary>
             <returns>Returns the full name of DemosaicingMode</returns>
@@ -12712,6 +13578,88 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         <member name="T:Basler.Pylon.PLUsbCamera.GainAutoEnum">
             <tocexclude />
             <summary>Sets the operation mode of the gain auto function. The gain auto function automatically adjusts the gain within set limits until a target brightness value is reached.</summary>
+        </member>
+        <member name="M:Basler.Pylon.PLUsbCamera.ROIZoneModeEnum.ToString">
+            <summary>The full name of ROIZoneMode</summary>
+            <returns>Returns the full name of ROIZoneMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneModeEnum.Name">
+            <summary>The full name of ROIZoneMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneModeEnum.On">
+            <summary>
+                <para>Enables the previously set ROI zone.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneModeEnum.Off">
+            <summary>
+                <para>Disables the previously set ROI zone.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLUsbCamera.ROIZoneModeEnum">
+            <tocexclude />
+            <summary>Provides for enabling/disabling the previously set ROI zone.</summary>
+        </member>
+        <member name="M:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.ToString">
+            <summary>The full name of ROIZoneSelector</summary>
+            <returns>Returns the full name of ROIZoneSelector</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Name">
+            <summary>The full name of ROIZoneSelector</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone7">
+            <summary>
+                <para>Sets vertical ROI zone 7 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone6">
+            <summary>
+                <para>Sets vertical ROI zone 6 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone5">
+            <summary>
+                <para>Sets vertical ROI zone 5 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone4">
+            <summary>
+                <para>Sets vertical ROI zone 4 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone3">
+            <summary>
+                <para>Sets vertical ROI zone 3 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone2">
+            <summary>
+                <para>Sets vertical ROI zone 2 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone1">
+            <summary>
+                <para>Sets vertical ROI zone 1 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum.Zone0">
+            <summary>
+                <para>Sets vertical ROI zone 0 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLUsbCamera.ROIZoneSelectorEnum">
+            <tocexclude />
+            <summary>Sets a ROI zone to be enabled, configured, and assembled with other ROI zones.</summary>
         </member>
         <member name="M:Basler.Pylon.PLUsbCamera.TestPatternEnum.ToString">
             <summary>The full name of TestPattern</summary>
@@ -14352,6 +15300,12 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.PgiMode">
+            <summary>
+                <para>Enables Basler PGI image optimizations.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
         <member name="P:Basler.Pylon.PLUsbCamera.DemosaicingMode">
             <summary>
                 <para>Sets the demosaicing mode.</para>
@@ -14364,9 +15318,21 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.BslSaturation">
+            <summary>
+                <para>Adjusting the saturation changes the intensity of the colors. A higher saturation, for example, makes colors easier to distinguish.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
         <member name="P:Basler.Pylon.PLUsbCamera.BslHueValue">
             <summary>
                 <para>Hue shift to be applied. Adjusting the hue shifts the colors of the image. This can be useful, e.g., for correcting minor color shifts or creating false-color images.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.BslHue">
+            <summary>
+                <para>Adjusting the hue shifts the colors of the image. This can be useful, e.g., for correcting minor color shifts or creating false-color images.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -14505,6 +15471,30 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         <member name="P:Basler.Pylon.PLUsbCamera.GainAuto">
             <summary>
                 <para>Sets the operation mode of the gain auto function. The gain auto function automatically adjusts the gain within set limits until a target brightness value is reached.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneOffset">
+            <summary>
+                <para>Sets the ROI zone offset [pixels, in direction of assembly] for the previously enabled ROI zone. Equivalent to OffsetY for vertical zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSize">
+            <summary>
+                <para>Sets the ROI zone 'thickness' (pixels, in direction of assembly) for the previously enabled ROI zone. Equivalent to Height for vertical zones.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneMode">
+            <summary>
+                <para>Provides for enabling/disabling the previously set ROI zone.</para>
+                <para>Applies to:  USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLUsbCamera.ROIZoneSelector">
+            <summary>
+                <para>Sets a ROI zone to be enabled, configured, and assembled with other ROI zones.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -21738,14 +22728,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PL1394Stream.MaxBufferSize">
             <summary>
-                <para>Size of the greatest buffer to be used. Unit is bytes. Raising this value may cause higher resource demands on a subsequent PrepareGrab call. </para>
+                <para>Maximum size (in bytes) of a buffer used for grabbing images. A grab application must set this parameter before grabbing starts.</para>
                 <para>Applies to:  1394</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PL1394Stream.MaxNumBuffer">
             <summary>
-                <para>Maximum number of Buffers that are going to be used simultaneously. Raising this value may cause higher
-resource demands on a subsequent PrepareGrab call.</para>
+                <para>Maximum number of buffers that can be used simultaneously for grabbing images.</para>
                 <para>Applies to:  1394</para>
             </summary>
         </member>
@@ -24620,19 +25609,31 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.TransmissionTypeEnum.SubnetDirectedBroadcast">
             <summary>
-                <para>The subnet broadcast address is obtained by performing a bitwise OR between the bit complement of the subnet mask and the network IP address (e.g. IP: 169.254.0.0, Netmask 169.254.0.0 -&gt; Broadcast: 169.254.255.255).</para>
+                <para>The stream data is sent to all devices in the same subnet as the camera. The subnet broadcast address is obtained by performing a bitwise OR operation between the camera's IP address (Destination IP Address parameter) and the bit complement of the subnet mask.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TransmissionTypeEnum.LimitedBroadcast">
             <summary>
-                <para>This broadcast is 'limited' in the sense that it does not reach any device on the Internet.</para>
+                <para>The stream data is sent to all devices in the local area network (255.255.255.255).</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TransmissionTypeEnum.Multicast">
             <summary>
-                <para>In order to use multicasting, you have to specify an IP multicast group address in the 'IP address' field (224.0.0.0 to 239.255.255.255). Keep in mind that some multicast addresses are reserved. The address range from 239.255.0.0 to 239.255.255.255 is assigned by RFC 2365 as a locally administered address space. Use one of these addresses if you are not sure.</para>
+                <para>The stream data is sent to selected devices in the local network.Â The Destination IP Address parameter must be set to a multicast group address (224.0.0.0 to 239.255.255.255). Some addresses in this range are reserved. If you are unsure, use an address between 239.255.0.0 and 239.255.255.255. This range is assigned by RFC 2365 as a locally administered address space. </para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLStream.TransmissionTypeEnum.Unicast">
+            <summary>
+                <para>The stream data is sent to a single device in the local network.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLStream.TransmissionTypeEnum.UseCameraConfig">
+            <summary>
+                <para>The stream transmission configuration is read from the camera. Use this option only if you want to set up a monitoring application.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -24749,7 +25750,7 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="T:Basler.Pylon.PLStream.AccessModeEnum">
             <tocexclude />
-            <summary>Camera access mode.</summary>
+            <summary>Indicates the mode of access the current application has to the device.</summary>
         </member>
         <member name="M:Basler.Pylon.PLStream.TypeEnum.ToString">
             <summary>The full name of Type</summary>
@@ -24760,13 +25761,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.TypeEnum.NoDriverAvailable">
             <summary>
-                <para>Indicates that no suitable driver is installed.</para>
+                <para>No suitable driver is installed.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLStream.TypeEnum">
             <tocexclude />
-            <summary>Selects the driver type to be used.</summary>
+            <summary>Sets the driver type to be used by the stream grabber.</summary>
         </member>
         <member name="M:Basler.Pylon.PLStream.StatusEnum.ToString">
             <summary>The full name of Status</summary>
@@ -24777,7 +25778,7 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.StatusEnum.NotInitialized">
             <summary>
-                <para>The low level stream grabber is not initialized.</para>
+                <para>The stream grabber is not initialized.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -24789,73 +25790,71 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.StatusEnum.Locked">
             <summary>
-                <para>The low level stream grabber is locked.</para>
+                <para>The stream grabber is locked.</para>
                 <para>Applies to:  1394, GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.StatusEnum.Open">
             <summary>
-                <para>The low level stream grabber is open.</para>
+                <para>The stream grabber is open.</para>
                 <para>Applies to:  1394, GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.StatusEnum.Closed">
             <summary>
-                <para>The low level stream grabber is closed.</para>
+                <para>The stream grabber is closed.</para>
                 <para>Applies to:  1394, GigE</para>
             </summary>
         </member>
         <member name="T:Basler.Pylon.PLStream.StatusEnum">
             <tocexclude />
-            <summary>Shows the current stream grabber status.</summary>
+            <summary>Indicates the current status of the stream grabber.</summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Last_Block_Id">
             <summary>
-                <para>The last grabbed block ID.</para>
+                <para>Last grabbed block ID.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Resynchronization_Count">
             <summary>
-                <para>The count of stream resynchronizations.</para>
+                <para>Number of stream resynchronizations.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Missed_Frame_Count">
             <summary>
-                <para>The count of bad or missed frames between successfully grabbed images.</para>
+                <para>Number of corrupt or lost frames between successfully grabbed images.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Last_Failed_Buffer_Status_Text">
             <summary>
-                <para>The message text of the status code of the last failed buffer.</para>
+                <para>Status code of the last failed buffer.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Last_Failed_Buffer_Status">
             <summary>
-                <para>The status code of the last failed buffer.</para>
+                <para>Status code of the last failed buffer.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TransferTimeout">
             <summary>
-                <para>
-   Timeout in ms for payload and trailer transfers.
-   </para>
+                <para>Timeout for payload and trailer transfers in milliseconds.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TransferLoopThreadPriority">
             <summary>
-                <para>The priority of the thread that handles USB requests of the stream interface.</para>
+                <para>Priority of the thread that handles USB requests from the stream interface.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.NumMaxQueuedUrbs">
             <summary>
-                <para>The maximum number of requests to be enqueued to the driver.</para>
+                <para>Maximum number of USB request blocks (URBs) to be enqueued simultaneously.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -24904,7 +25903,7 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.DestinationAddr">
             <summary>
-                <para>The camera will sent all stream data to this IP address. For more details see 'TransmissionType' feature.</para>
+                <para>IP address to which the stream grabber sends all stream data.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -24992,85 +25991,85 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Resend_Packet_Count">
             <summary>
-                <para>Counts the number of packets requested by PACKETRESEND commands.</para>
+                <para>Number of packets requested by packet resend commands.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Resend_Request_Count">
             <summary>
-                <para>Counts the number of emitted PACKETRESEND commands.</para>
+                <para>Number of emitted packet resend commands sent.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Failed_Packet_Count">
             <summary>
-                <para>Counts the number of failed packets (status != success).</para>
+                <para>Number of failed packets.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Total_Packet_Count">
             <summary>
-                <para>Counts the number of received packets.</para>
+                <para>Number of packets received.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Buffer_Underrun_Count">
             <summary>
-                <para>Counts the number of frames lost because there were no buffers queued to the driver.</para>
+                <para>Number of frames lost because there were no buffers in the queue.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Failed_Buffer_Count">
             <summary>
-                <para>The count of buffers that returned with an error status.</para>
+                <para>GigE cameras: Number of buffers with at least one failed packet. A packet is considered failed if its status is not 'success'. Other cameras: Number of buffers that returned with an error status. </para>
                 <para>Applies to:  GigE, USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Statistic_Total_Buffer_Count">
             <summary>
-                <para>The total count of processed buffers.</para>
+                <para>GigE cameras: Number of frames received. Other cameras: Number of buffers processed.</para>
                 <para>Applies to:  GigE, USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TypeIsSocketDriverAvailable">
             <summary>
-                <para>Specifies whether the socket driver is currently available.</para>
+                <para>Indicates whether the socket driver is currently available.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TypeIsWindowsFilterDriverAvailable">
             <summary>
-                <para>Specifies whether the Pylon GigE Vision Streaming Filter Driver is currently available.</para>
+                <para>Indicates whether the pylon GigE Vision Filter Driver is currently available.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.TypeIsWindowsIntelPerformanceDriverAvailable">
             <summary>
-                <para>Specifies whether the Pylon GigE Vision Performance Driver for Intel network controllers is currently available.</para>
+                <para>Indicates whether the pylon GigE Vision Performance Driver is currently available.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.AccessMode">
             <summary>
-                <para>Camera access mode.</para>
+                <para>Indicates the mode of access the current application has to the device.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.SocketBufferSize">
             <summary>
-                <para>The socket buffer size in KB.</para>
+                <para>Socket buffer size in kilobytes.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ReceiveThreadPriority">
             <summary>
-                <para>This value sets the absolute thread priority of the receive thread.</para>
+                <para>Thread priority of the receive thread. Only available if the socket driver is used. To assign the priority, the Receive Thread Priority Override parameter must be set to true.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ReceiveThreadPriorityOverride">
             <summary>
-                <para>If enabled, the user can set a custom priority of the receive thread.</para>
+                <para>Enables assigning a custom priority to the thread which receives incoming stream packets.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -25089,37 +26088,37 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.MaximumNumberResendRequests">
             <summary>
-                <para>Maximum number of resend requests per packet.</para>
+                <para>Maximum number of resend requests per missing packet.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ResendRequestResponseTimeout">
             <summary>
-                <para>Timeout in milliseconds for missing resend responses.</para>
+                <para>Time to wait (in milliseconds) between sending a resend request and considering the request as lost.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ResendTimeout">
             <summary>
-                <para>Time in milliseconds to wait until a resend request is issued.</para>
+                <para>Time to wait (in milliseconds) between detecting a missing packet and sending a resend request.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ResendRequestBatching">
             <summary>
-                <para>Additional resend batching as percentage of threshold.</para>
+                <para>Amount of packet resend requests to be batched, i.e., sent together.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ResendRequestThreshold">
             <summary>
-                <para>Resend threshold as percentage of receive window.</para>
+                <para>Threshold after which resend requests are initiated.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.ReceiveWindowSize">
             <summary>
-                <para>Size of the sliding receive window in number of frames.</para>
+                <para>Size (in frames) of the receive window in which the stream grabber looks for missing packets.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
@@ -25170,13 +26169,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.Type">
             <summary>
-                <para>Selects the driver type to be used.</para>
+                <para>Sets the driver type to be used by the stream grabber.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.Status">
             <summary>
-                <para>Shows the current stream grabber status.</para>
+                <para>Indicates the current status of the stream grabber.</para>
                 <para>Applies to:  1394, GigE</para>
             </summary>
         </member>
@@ -25200,13 +26199,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLStream.MaxBufferSize">
             <summary>
-                <para>The maximum buffer size in bytes that can be registered.</para>
+                <para>Maximum size (in bytes) of a buffer used for grabbing images.</para>
                 <para>Applies to:  1394, GigE, USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLStream.MaxNumBuffer">
             <summary>
-                <para>The maximum number of buffers that can be used simultaneously.</para>
+                <para>Maximum number of buffers that can be used simultaneously for grabbing images.</para>
                 <para>Applies to:  1394, GigE, USB</para>
             </summary>
         </member>
@@ -25256,13 +26255,13 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         </member>
         <member name="P:Basler.Pylon.PLEventGrabber.TransferLoopThreadPriority">
             <summary>
-                <para>The priority of the thread that handles USB requests of the event stream interface.</para>
+                <para>Priority of the thread that handles USB requests from the stream interface.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
         <member name="P:Basler.Pylon.PLEventGrabber.NumMaxQueuedUrbs">
             <summary>
-                <para>The maximum number of requests to be enqueued to the driver.</para>
+                <para>Maximum number of USB request blocks (URBs) to be enqueued simultaneously.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
@@ -25293,9 +26292,23 @@ Note: Make sure to also select a suitable raw pixel data output format.</para>
         <member name="T:Basler.Pylon.PLEventGrabber">
             <summary>List of all parameter names available for IEEE 1394, GigE, and USB low level event grabbers.</summary>
         </member>
-        <member name="M:Basler.Pylon.Configuration.RaiseUnsupportedFeatureException(System.String)">
-            <summary>Raise an exception stating that a feature is not supported.</summary>
-            <param name="msg">The exception msg.</param>
+        <member name="P:Basler.Pylon.DeviceType.GenTLConsumer">
+            <summary>The Basler Camera Emu device type.</summary>
+        </member>
+        <member name="P:Basler.Pylon.DeviceType.CameraLink">
+            <summary>The Basler Camera Link device type.</summary>
+        </member>
+        <member name="P:Basler.Pylon.DeviceType.IEEE1394">
+            <summary>The Basler IEEE 1394 device type.</summary>
+        </member>
+        <member name="P:Basler.Pylon.DeviceType.GigE">
+            <summary>The Basler GigE device type.</summary>
+        </member>
+        <member name="P:Basler.Pylon.DeviceType.Usb">
+            <summary>The Basler USB device type.</summary>
+        </member>
+        <member name="T:Basler.Pylon.DeviceType">
+            <summary>Lists common device types.</summary>
         </member>
         <member name="M:Basler.Pylon.Camera.get_Parameters">
             <summary> Usage: Parameters[PLCamera.ParameterName] </summary>
@@ -25547,9 +26560,12 @@ The connection to the camera device can be lost if it is physically disconnected
             </remarks>
         </member>
         <member name="P:Basler.Pylon.Camera.IsOpen">
-            <summary>Indicates if the connection to the camera is currently open</summary>
-            <returns>Returns true if the connection to the camera is currently open.</returns>
+            <summary>Indicates if camera object has been opened.</summary>
+            <returns>Returns true if camera object has been opened.</returns>
             <remarks>
+                <para>
+The camera object will not automatically close itself if the connection to the camera device is lost, e.g., if the camera device is physically disconnected from the PC.
+</para>
                 <para>
                     <b>Thread safety:</b> This method is synchronized with the lock of the camera object.</para>
                 <para>
@@ -25937,6 +26953,9 @@ If exceptions are thrown after <see cref="M:Basler.Pylon.IStreamGrabber.Start(Ba
                     <list type="bullet">
                         <item> If the camera object not currently grabbing, nothing is done.</item>
                         <item> The configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStopping" /> is fired. Possible exceptions from event calls are caught and ignored. All event handlers are notified.</item>
+                        <item> The AcquisitionStop command of the camera device is executed.</item>
+                        <item> The grabbing is stopped.</item>
+                        <item> All buffer queues are cleared.</item>
                         <item> If the grabbing has been stopped successfully, the <see cref="E:Basler.Pylon.IStreamGrabber.GrabStopped" /> configuration event is fired. Possible exceptions from event calls are caught and ignored. All event handlers are notified.</item>
                     </list>
                 </para>
@@ -25973,6 +26992,7 @@ automatically. The images are counted according to the grab strategy. Skipped im
                         <item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item>
                         <item> If the camera device parameter <see cref="P:Basler.Pylon.PLCamera.ChunkModeActive" /> is enabled, the chunk parsing support is initialized.</item>
                         <item> If the parameter GrabCameraEvents is enabled, the event grabbing support is initialized.</item>
+                        <item> The AcquisitionStart command of the camera device is executed.</item>
                         <item> If the grabbing has been started successfully, the configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item>
                         <item> If <paramref name="grabLoopType" /> is set to <c>ProvidedByStreamGrabber</c>, an additional grab loop thread is started that calls <see cref="M:Basler.Pylon.IStreamGrabber.RetrieveResult(System.Int32,Basler.Pylon.TimeoutHandling)" /> in a loop.</item>
                     </list>
@@ -26014,6 +27034,7 @@ If the <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> event call trigg
                         <item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item>
                         <item> If the camera device parameter <see cref="P:Basler.Pylon.PLCamera.ChunkModeActive" /> is enabled, the chunk parsing support is initialized.</item>
                         <item> If the parameter GrabCameraEvents is enabled, the event grabbing support is initialized.</item>
+                        <item> The AcquisitionStart command of the camera device is executed.</item>
                         <item> If the grabbing has been started successfully, the configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item>
                         <item> If <paramref name="grabLoopType" /> is set to <c>ProvidedByStreamGrabber</c>, an additional grab loop thread is started that calls <see cref="M:Basler.Pylon.IStreamGrabber.RetrieveResult(System.Int32,Basler.Pylon.TimeoutHandling)" /> in a loop.</item>
                     </list>
@@ -26050,7 +27071,7 @@ If the <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> event call trigg
 Grabbing is started using the <c>OneByOne</c> grab strategy and the <c>ProvidedByUser</c> grab loop method.
 For each grabbed image, <see cref="M:Basler.Pylon.IStreamGrabber.RetrieveResult(System.Int32,Basler.Pylon.TimeoutHandling)" /> must be called.
 
-<para><list type="bullet"><item> The configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarting" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item><item> If the camera device parameter <see cref="P:Basler.Pylon.PLCamera.ChunkModeActive" /> is enabled, the chunk parsing support is initialized.</item><item> If the parameter GrabCameraEvents is enabled, the event grabbing support is initialized.</item><item> If the grabbing has been started successfully, the configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item></list></para><para><b>Preconditions:</b><br /><list type="bullet"><item> The grabbing is stopped.</item></list></para><para><b>Postconditions:</b><br /><list type="bullet"><item> The grabbing is started.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item></list></para><para><b>Thread safety:</b><br />This method is synchronized with the camera.</para><para><b>Error safety:</b><br />
+<para><list type="bullet"><item> The configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarting" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item><item> If the camera device parameter <see cref="P:Basler.Pylon.PLCamera.ChunkModeActive" /> is enabled, the chunk parsing support is initialized.</item><item> If the parameter GrabCameraEvents is enabled, the event grabbing support is initialized.</item><item> The AcquisitionStart command of the camera device is executed.</item><item> If the grabbing has been started successfully, the configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item></list></para><para><b>Preconditions:</b><br /><list type="bullet"><item> The grabbing is stopped.</item></list></para><para><b>Postconditions:</b><br /><list type="bullet"><item> The grabbing is started.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item></list></para><para><b>Thread safety:</b><br />This method is synchronized with the camera.</para><para><b>Error safety:</b><br />
 The StreamGrabber is still valid after an error. Configuration event calls may throw exceptions. The grab implementation may throw exceptions.
 If the <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> event call triggers an exception, the grabbing is stopped with <see cref="M:Basler.Pylon.IStreamGrabber.Stop" />.
 </para></remarks>
@@ -26060,7 +27081,7 @@ If the <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> event call trigg
 Grabbing is started using the <c>OneByOne</c> grab strategy and the <c>ProvidedByUser</c> grab loop method.
 For each grabbed image, <see cref="M:Basler.Pylon.IStreamGrabber.RetrieveResult(System.Int32,Basler.Pylon.TimeoutHandling)" /> must be called.
 
-<remarks><para><list type="bullet"><item> The configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarting" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item><item> If the camera device parameter <see cref="P:Basler.Pylon.PLCamera.ChunkModeActive" /> is enabled, the chunk parsing support is initialized.</item><item> If the parameter GrabCameraEvents is enabled, the event grabbing support is initialized.</item><item> If the grabbing has been started successfully, the configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item></list></para><para><b>Preconditions:</b><br /><list type="bullet"><item> The grabbing is stopped.</item></list></para><para><b>Postconditions:</b><br /><list type="bullet"><item> The grabbing is started.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item></list></para><para><b>Thread safety:</b><br />This method is synchronized with the camera.</para><para><b>Error safety:</b><br />
+<remarks><para><list type="bullet"><item> The configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarting" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item><item> If the camera device parameter <see cref="P:Basler.Pylon.PLCamera.ChunkModeActive" /> is enabled, the chunk parsing support is initialized.</item><item> If the parameter GrabCameraEvents is enabled, the event grabbing support is initialized.</item><item> The AcquisitionStart command of the camera device is executed.</item><item> If the grabbing has been started successfully, the configuration event <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> is fired. The notification of event handlers stops when an event call triggers an exception.</item></list></para><para><b>Preconditions:</b><br /><list type="bullet"><item> The grabbing is stopped.</item></list></para><para><b>Postconditions:</b><br /><list type="bullet"><item> The grabbing is started.</item><item> Grab-specific parameters of the camera object are locked, e.g. <see cref="P:Basler.Pylon.PLCameraInstance.MaxNumBuffer" />.</item></list></para><para><b>Thread safety:</b><br />This method is synchronized with the camera.</para><para><b>Error safety:</b><br />
 The StreamGrabber is still valid after an error. Configuration event calls may throw exceptions. The grab implementation may throw exceptions.
 If the <see cref="E:Basler.Pylon.IStreamGrabber.GrabStarted" /> event call triggers an exception, the grabbing is stopped with <see cref="M:Basler.Pylon.IStreamGrabber.Stop" />.
 </para></remarks></member>
@@ -26653,29 +27674,6 @@ private void OnImageGrabbed(Object sender, ImageGrabbedEventArgs e)
             <tocexclude />
             <summary>Identifies pixels that have a significantly greater or lesser intensity value than its neighboring pixels (outlier pixels) and adjusts their intensity value.</summary>
         </member>
-        <member name="M:Basler.Pylon.PLCamera.BslContrastModeEnum.ToString">
-            <summary>The full name of BslContrastMode</summary>
-            <returns>Returns the full name of BslContrastMode</returns>
-        </member>
-        <member name="P:Basler.Pylon.PLCamera.BslContrastModeEnum.Name">
-            <summary>The full name of BslContrastMode</summary>
-        </member>
-        <member name="P:Basler.Pylon.PLCamera.BslContrastModeEnum.SCurve">
-            <summary>
-                <para>S-curve contrast enhancement is used to adjust the contrast. This allows you to improve perceived contrast while preserving the dynamic range of the image.</para>
-                <para>Applies to:  USB</para>
-            </summary>
-        </member>
-        <member name="P:Basler.Pylon.PLCamera.BslContrastModeEnum.Linear">
-            <summary>
-                <para>Linear contrast enhancement is used to adjust the contrast.</para>
-                <para>Applies to:  USB</para>
-            </summary>
-        </member>
-        <member name="T:Basler.Pylon.PLCamera.BslContrastModeEnum">
-            <tocexclude />
-            <summary>Sets the contrast mode. This specifies which type of contrast enhancement is used to adjust the contrast.</summary>
-        </member>
         <member name="M:Basler.Pylon.PLCamera.LightSourcePresetEnum.ToString">
             <summary>The full name of LightSourcePreset</summary>
             <returns>Returns the full name of LightSourcePreset</returns>
@@ -27224,6 +28222,88 @@ private void OnImageGrabbed(Object sender, ImageGrabbedEventArgs e)
             <tocexclude />
             <summary>Sets the exposure overlap time mode.</summary>
         </member>
+        <member name="M:Basler.Pylon.PLCamera.ROIZoneModeEnum.ToString">
+            <summary>The full name of ROIZoneMode</summary>
+            <returns>Returns the full name of ROIZoneMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneModeEnum.Name">
+            <summary>The full name of ROIZoneMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneModeEnum.On">
+            <summary>
+                <para>Enables the previously set ROI zone.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneModeEnum.Off">
+            <summary>
+                <para>Disables the previously set ROI zone.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLCamera.ROIZoneModeEnum">
+            <tocexclude />
+            <summary>Provides for enabling/disabling the previously set ROI zone.</summary>
+        </member>
+        <member name="M:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.ToString">
+            <summary>The full name of ROIZoneSelector</summary>
+            <returns>Returns the full name of ROIZoneSelector</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Name">
+            <summary>The full name of ROIZoneSelector</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone7">
+            <summary>
+                <para>Sets vertical ROI zone 7 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone6">
+            <summary>
+                <para>Sets vertical ROI zone 6 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone5">
+            <summary>
+                <para>Sets vertical ROI zone 5 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone4">
+            <summary>
+                <para>Sets vertical ROI zone 4 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone3">
+            <summary>
+                <para>Sets vertical ROI zone 3 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone2">
+            <summary>
+                <para>Sets vertical ROI zone 2 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone1">
+            <summary>
+                <para>Sets vertical ROI zone 1 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelectorEnum.Zone0">
+            <summary>
+                <para>Sets vertical ROI zone 0 to be enabled, configured, and vertically assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLCamera.ROIZoneSelectorEnum">
+            <tocexclude />
+            <summary>Sets a ROI zone to be enabled, configured, and assembled with other ROI zones.</summary>
+        </member>
         <member name="M:Basler.Pylon.PLCamera.BinningVerticalModeEnum.ToString">
             <summary>The full name of BinningVerticalMode</summary>
             <returns>Returns the full name of BinningVerticalMode</returns>
@@ -27270,6 +28350,29 @@ private void OnImageGrabbed(Object sender, ImageGrabbedEventArgs e)
             <tocexclude />
             <summary>Sets the binning horizontal mode.</summary>
         </member>
+        <member name="M:Basler.Pylon.PLCamera.PgiModeEnum.ToString">
+            <summary>The full name of PgiMode</summary>
+            <returns>Returns the full name of PgiMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.PgiModeEnum.Name">
+            <summary>The full name of PgiMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.PgiModeEnum.On">
+            <summary>
+                <para>Basler PGI image optimizations are enabled.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.PgiModeEnum.Off">
+            <summary>
+                <para>Basler PGI image optimizations are disabled.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLCamera.PgiModeEnum">
+            <tocexclude />
+            <summary>Enables Basler PGI image optimizations.</summary>
+        </member>
         <member name="M:Basler.Pylon.PLCamera.DemosaicingModeEnum.ToString">
             <summary>The full name of DemosaicingMode</summary>
             <returns>Returns the full name of DemosaicingMode</returns>
@@ -27292,6 +28395,29 @@ private void OnImageGrabbed(Object sender, ImageGrabbedEventArgs e)
         <member name="T:Basler.Pylon.PLCamera.DemosaicingModeEnum">
             <tocexclude />
             <summary>Sets the demosaicing mode.</summary>
+        </member>
+        <member name="M:Basler.Pylon.PLCamera.BslContrastModeEnum.ToString">
+            <summary>The full name of BslContrastMode</summary>
+            <returns>Returns the full name of BslContrastMode</returns>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslContrastModeEnum.Name">
+            <summary>The full name of BslContrastMode</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslContrastModeEnum.SCurve">
+            <summary>
+                <para>S-curve contrast enhancement is used to adjust the contrast. This allows you to improve perceived contrast while preserving the dynamic range of the image.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslContrastModeEnum.Linear">
+            <summary>
+                <para>Linear contrast enhancement is used to adjust the contrast.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.PLCamera.BslContrastModeEnum">
+            <tocexclude />
+            <summary>Sets the contrast mode. This specifies which type of contrast enhancement is used to adjust the contrast.</summary>
         </member>
         <member name="M:Basler.Pylon.PLCamera.SequenceConfigurationModeEnum.ToString">
             <summary>The full name of SequenceConfigurationMode</summary>
@@ -28172,6 +29298,12 @@ private void OnImageGrabbed(Object sender, ImageGrabbedEventArgs e)
         </member>
         <member name="P:Basler.Pylon.PLCamera.ExpertFeatureAccessSelectorEnum.Name">
             <summary>The full name of ExpertFeatureAccessSelector</summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ExpertFeatureAccessSelectorEnum.ExpertFeature10">
+            <summary>
+                <para>Expert Feature 10 can be configured.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
         </member>
         <member name="P:Basler.Pylon.PLCamera.ExpertFeatureAccessSelectorEnum.ExpertFeature9">
             <summary>
@@ -33769,24 +34901,6 @@ serves as the 'master' for serial communication and triggering.</para>
                 <para>Applies to:  USB</para>
             </summary>
         </member>
-        <member name="P:Basler.Pylon.PLCamera.BslContrast">
-            <summary>
-                <para>Amount of contrast to be applied. The more contrast you apply, the more defined the difference between light and dark areas in the image will be.</para>
-                <para>Applies to:  USB</para>
-            </summary>
-        </member>
-        <member name="P:Basler.Pylon.PLCamera.BslBrightness">
-            <summary>
-                <para>Amount of brightness to be applied. This allows you to lighten or darken the entire image.</para>
-                <para>Applies to:  USB</para>
-            </summary>
-        </member>
-        <member name="P:Basler.Pylon.PLCamera.BslContrastMode">
-            <summary>
-                <para>Sets the contrast mode. This specifies which type of contrast enhancement is used to adjust the contrast.</para>
-                <para>Applies to:  USB</para>
-            </summary>
-        </member>
         <member name="P:Basler.Pylon.PLCamera.BalanceRatio">
             <summary>
                 <para>Value of the currently selected balance ratio channel or tap.</para>
@@ -34735,6 +35849,30 @@ serves as the 'master' for serial communication and triggering.</para>
                 <para>Applies to:  GigE, USB</para>
             </summary>
         </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneOffset">
+            <summary>
+                <para>Sets the ROI zone offset [pixels, in direction of assembly] for the previously enabled ROI zone. Equivalent to OffsetY for vertical zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSize">
+            <summary>
+                <para>Sets the ROI zone 'thickness' (pixels, in direction of assembly) for the previously enabled ROI zone. Equivalent to Height for vertical zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneMode">
+            <summary>
+                <para>Provides for enabling/disabling the previously set ROI zone.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.ROIZoneSelector">
+            <summary>
+                <para>Sets a ROI zone to be enabled, configured, and assembled with other ROI zones.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
         <member name="P:Basler.Pylon.PLCamera.ScalingVerticalAbs">
             <summary>
                 <para>This is a float value that sets the vertical scaling factor of the image.</para>
@@ -34783,9 +35921,69 @@ serves as the 'master' for serial communication and triggering.</para>
                 <para>Applies to:  GigE</para>
             </summary>
         </member>
+        <member name="P:Basler.Pylon.PLCamera.PgiMode">
+            <summary>
+                <para>Enables Basler PGI image optimizations.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
         <member name="P:Basler.Pylon.PLCamera.DemosaicingMode">
             <summary>
                 <para>Sets the demosaicing mode.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslContrastMode">
+            <summary>
+                <para>Sets the contrast mode. This specifies which type of contrast enhancement is used to adjust the contrast.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslContrastRaw">
+            <summary>
+                <para>Adjusting the contrast increases the difference between light and dark areas in the image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslContrast">
+            <summary>
+                <para>Amount of contrast to be applied. The more contrast you apply, the more defined the difference between light and dark areas in the image will be.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslBrightnessRaw">
+            <summary>
+                <para>Adjusting the brightness lightens or darkens the entire image.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslBrightness">
+            <summary>
+                <para>Amount of brightness to be applied. This allows you to lighten or darken the entire image.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslSaturationRaw">
+            <summary>
+                <para>Adjusting the saturation changes the intensity of the colors. A higher saturation, for example, makes colors easier to distinguish.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslSaturation">
+            <summary>
+                <para>Adjusting the saturation changes the intensity of the colors. A higher saturation, for example, makes colors easier to distinguish.</para>
+                <para>Applies to:  GigE, USB</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslHueRaw">
+            <summary>
+                <para>Adjusting the hue shifts the colors of the image. This can be useful, e.g., for correcting minor color shifts or creating false-color images.</para>
+                <para>Applies to:  GigE</para>
+            </summary>
+        </member>
+        <member name="P:Basler.Pylon.PLCamera.BslHue">
+            <summary>
+                <para>Adjusting the hue shifts the colors of the image. This can be useful, e.g., for correcting minor color shifts or creating false-color images.</para>
                 <para>Applies to:  GigE, USB</para>
             </summary>
         </member>
@@ -37348,9 +38546,12 @@ The connection to the camera device can be lost if it is physically disconnected
             </remarks>
         </member>
         <member name="P:Basler.Pylon.ICamera.IsOpen">
-            <summary>Indicates if the connection to the camera is currently open</summary>
-            <returns>Returns true if the connection to the camera is currently open.</returns>
+            <summary>Indicates if camera object has been opened.</summary>
+            <returns>Returns true if camera object has been opened.</returns>
             <remarks>
+                <para>
+The camera object will not automatically close itself if the connection to the camera device is lost, e.g., if the camera device is physically disconnected from the PC.
+</para>
                 <para>
                     <b>Thread safety:</b> This method is synchronized with the lock of the camera object.</para>
                 <para>
@@ -37370,30 +38571,6 @@ Provides convenient access to a camera device.
         </member>
         <member name="F:Basler.Pylon.TimeoutHandling.Return">
             <summary>The method returns on timeout. The type of data returned depends on the method used.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.PixelDataConverter">
-            <summary>The image format converter parameter path.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.EventGrabber">
-            <summary>The event grabber.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.ChunkData">
-            <summary>The chunk data of the grab result.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.DeviceTransportLayer">
-            <summary>The device transport layer.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.StreamGrabber0">
-            <summary>The stream grabber, number 0.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.CameraDevice">
-            <summary>The camera device.</summary>
-        </member>
-        <member name="P:Basler.Pylon.ParameterPath.CameraInstance">
-            <summary>The camera object instance.</summary>
-        </member>
-        <member name="T:Basler.Pylon.ParameterPath">
-            <summary>Lists common objects.</summary>
         </member>
         <member name="T:Basler.Pylon.DeviceAccessibilityInfo">
             <summary>Describes the accessibility state of a camera device.</summary>
@@ -37532,6 +38709,34 @@ The camera finder can be used to query information about camera devices connecte
         </member>
         <member name="F:Basler.Pylon.DeviceAccessibilityInfo.Unknown">
             <summary>The accessibility of the device could not be determined. The state of accessibility is unknown.</summary>
+        </member>
+        <member name="M:Basler.Pylon.IParameterCollection.Save(System.String,System.String)">
+            <summary>Saves the parameters to a file.</summary>
+            <param name="filename">Name and path of the parameter file.</param>
+            <param name="parameterPath">The parameter path identifying the set of parameters to save, e.g. <see cref="P:Basler.Pylon.ParameterPath.CameraDevice" /> .</param>
+            <remarks>
+                <para>
+The parameter source needs to be open in order for this to succeed.
+</para>
+                <para>
+                    <b>Thread safety:</b> This method is synchronized with the source of the parameter collection.</para>
+                <para>
+                    <b>Error safety:</b> Can throw exceptions.</para>
+            </remarks>
+        </member>
+        <member name="M:Basler.Pylon.IParameterCollection.Load(System.String,System.String)">
+            <summary>Loads the parameters from a file.</summary>
+            <param name="filename">Name and path of the parameter file.</param>
+            <param name="parameterPath">The parameter path identifying the set of parameters to load, e.g. <see cref="P:Basler.Pylon.ParameterPath.CameraDevice" />.</param>
+            <remarks>
+                <para>
+The parameter source needs to be open in order for this to succeed.
+</para>
+                <para>
+                    <b>Thread safety:</b> This method is synchronized with the source of the parameter collection.</para>
+                <para>
+                    <b>Error safety:</b> Can throw exceptions.</para>
+            </remarks>
         </member>
         <member name="M:Basler.Pylon.IParameterCollection.Contains(Basler.Pylon.EnumName)">
             <summary>Checks whether a parameter of type enum is available.</summary>
@@ -37755,6 +38960,33 @@ A parameter collection is enumerable. The enumerator lists all user parameters.
 </para>
             </remarks>
         </member>
+        <member name="P:Basler.Pylon.ParameterPath.VideoWriter">
+            <summary>The video writer parameter path.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.PixelDataConverter">
+            <summary>The image format converter parameter path.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.EventGrabber">
+            <summary>The event grabber.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.ChunkData">
+            <summary>The chunk data of the grab result.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.DeviceTransportLayer">
+            <summary>The device transport layer.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.StreamGrabber0">
+            <summary>The stream grabber, number 0.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.CameraDevice">
+            <summary>The camera device.</summary>
+        </member>
+        <member name="P:Basler.Pylon.ParameterPath.CameraInstance">
+            <summary>The camera object instance.</summary>
+        </member>
+        <member name="T:Basler.Pylon.ParameterPath">
+            <summary>Lists common objects.</summary>
+        </member>
         <member name="M:Basler.Pylon.EnumName.ToString">
             <summary>The enum parameter name as string.</summary>
             <returns>Returns the enum parameter name as string. The name can include path information.</returns>
@@ -37762,7 +38994,7 @@ A parameter collection is enumerable. The enumerator lists all user parameters.
         <member name="P:Basler.Pylon.EnumName.Name">
             <summary>The enum parameter name as string.</summary>
         </member>
-        <member name="M:Basler.Pylon.EnumName.op_Implicit(Basler.Pylon.IParameterListEnum)~Basler.Pylon.EnumName">
+        <member name="M:Basler.Pylon.EnumName.op_Implicit(Basler.Pylon.ParameterListEnum)~Basler.Pylon.EnumName">
             <summary>The class EnumNameProvider can be automatically converted into an EnumName.</summary>
             <param name="name">The name of the parameter. Must be an object deriving from EnumNameProvider.</param>
             <returns>Returns the enum parameter name.</returns>
@@ -37779,10 +39011,10 @@ A parameter collection is enumerable. The enumerator lists all user parameters.
         <member name="T:Basler.Pylon.EnumName">
             <summary>Defines an enum parameter name by combining the parameter name string and the parameter type information.</summary>
         </member>
-        <member name="P:Basler.Pylon.IParameterListEnum.Name">
+        <member name="P:Basler.Pylon.ParameterListEnum.Name">
             <summary>The name of the enum parameter as string.</summary>
         </member>
-        <member name="T:Basler.Pylon.IParameterListEnum">
+        <member name="T:Basler.Pylon.ParameterListEnum">
             <tocexclude />
             <summary>Advanced: This class is used to create parameter lists.</summary>
         </member>
@@ -39526,6 +40758,21 @@ For detailed information about pixel formats, see the <see href="http://www.emva
             <summary>
                 <para />Corresponds to the camera's PixelFormat enumeration setting YUV422_YUYV_Packed or YCbCr422_8.</summary>
         </member>
+        <member name="F:Basler.Pylon.PixelType.YUV420planar">
+            <summary>
+                <para>Y, U, V 8 bit planar.</para>
+            </summary>
+        </member>
+        <member name="F:Basler.Pylon.PixelType.YUV422planar">
+            <summary>
+                <para>Y, U, V 8 bit planar.</para>
+            </summary>
+        </member>
+        <member name="F:Basler.Pylon.PixelType.YUV444planar">
+            <summary>
+                <para>Y, U, V 8 bit planar.</para>
+            </summary>
+        </member>
         <member name="F:Basler.Pylon.PixelType.RGB16planar">
             <summary>
                 <para>Red, Green, Blue 16 bit planar.</para>Corresponds to the camera's PixelFormat enumeration setting RGB16planar.</summary>
@@ -39739,16 +40986,6 @@ The full name identifying the device.
 Provides standard transport layer info key names.
 </summary>
         </member>
-        <member name="T:Basler.Pylon.PCameraDetail.NamespaceDoc">
-            <summary>
-                <para>This will be removed.</para>
-            </summary>
-        </member>
-        <member name="T:Basler.Pylon.NamespaceDoc">
-            <summary>
-                <para>Provides classes and interfaces to find cameras, to parametrize cameras, and to acquire images.</para>
-            </summary>
-        </member>
         <member name="M:Basler.Pylon.IInfo.GetValueOrDefault(System.String,System.String)">
             <summary>Gets the property value if the given property key exists. Otherwise, returns the default value.</summary>
             <returns>Returns the property value if the given property key exists. Otherwise, returns the default value.</returns>
@@ -39792,6 +41029,16 @@ Throws a System.NotSupportedException if the <paramref name="key" /> passed does
             <summary>
 Provides access to the properties of an info object.
 </summary>
+        </member>
+        <member name="T:Basler.Pylon.PCameraDetail.NamespaceDoc">
+            <summary>
+                <para>This will be removed.</para>
+            </summary>
+        </member>
+        <member name="T:Basler.Pylon.NamespaceDoc">
+            <summary>
+                <para>Provides classes and interfaces to find cameras, to parametrize cameras, and to acquire images.</para>
+            </summary>
         </member>
     </members>
 </doc>
