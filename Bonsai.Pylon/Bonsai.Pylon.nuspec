@@ -11,12 +11,12 @@
     <iconUrl>https://bitbucket.org/horizongir/bonsai/raw/7aacc64dc4647e57362ab310238591dc197fef0d/Resources/Bonsai.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>$author$ © 2017</copyright>
+    <copyright>$author$ © 2019</copyright>
     <tags>Bonsai Basler pylon</tags>
   </metadata>
   <files>
     <file src="..\Externals\Basler.Pylon\pylon License.rtf" target="build\net45\pylonLicense.rtf"/>
-    <file src="..\Externals\Basler.Pylon\pylon Third-Party Licenses.html" target="build\net45\pylonThird-PartyLicenses.html"/>
+    <file src="..\Externals\Basler.Pylon\pylon_Third-Party_Licenses.html" target="build\net45\pylon_Third-Party_Licenses.html"/>
     <file src="..\Externals\Basler.Pylon\**\*.dll" target="build\net45\bin"/>
   </files>
 </package>
