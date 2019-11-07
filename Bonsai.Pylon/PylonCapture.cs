@@ -62,7 +62,7 @@ namespace Bonsai.Pylon
                                 };
 
                                 camera.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.Continuous);
-                                camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
+                                camera.StreamGrabber.Start(GrabStrategy, GrabLoop.ProvidedByStreamGrabber);
                                 cancellationToken.WaitHandle.WaitOne();
                             }
                             finally
@@ -89,6 +89,9 @@ namespace Bonsai.Pylon
         [Editor("Bonsai.Design.OpenFileNameEditor, Bonsai.Design", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
         [Description("The name of the file containing the camera configuration parameters.")]
         public string ParameterFile { get; set; }
+
+        [Description("The grab strategy used to acquire images. Images can be processed either by order of arrival (default) or by grabbing the latest frames first (low-latency, but risk frame drop).")]
+        public GrabStrategy GrabStrategy { get; set; }
 
         static void GetImageDepth(PixelType pixelType, out IplDepth depth, out int channels, out PixelType outputFormat)
         {
