@@ -1,0 +1,346 @@
+PYLON END-USER LICENSE AGREEMENT
+
+
+IMPORTANT - PLEASE READ CAREFULLY
+THIS END-USER LICENSE AGREEMENT ("AGREEMENT") IS A LEGAL AGREEMENT BETWEEN YOU, 
+EITHER  AN INDIVIDUAL OR A LEGAL ENTITY, ("CUSTOMER"), AND BASLER AG ("BASLER") 
+FOR THE BASLER SOFTWARE PRODUCTS ACCOMPANYING THIS AGREEMENT, WHICH INCLUDES 
+COMPUTER SOFTWARE AND MAY INCLUDE "ONLINE" OR ELECTRONIC DOCUMENTATION, ASSOCIATED 
+MEDIA, AND/OR PRINTED MATERIALS ("SOFTWARE"). BEFORE YOU DOWNLOAD, INSTALL OR USE 
+THE SOFTWARE, CAREFULLY READ THIS AGREEMENT. BY DOWNLOADING, INSTALLING OR USING 
+THE SOFTWARE, YOU CONSENT TO THE TERMS OF THIS AGREEMENT AND YOU AGREE TO BE BOUND 
+BY THIS AGREEMENT. IF YOU DO NOT AGREE TO THE TERMS AND CONDITIONS OF THIS AGREEMENT, 
+DO NOT DOWNLOAD, INSTALL OR USE THE SOFTWARE.
+
+
+1. DEFINITIONS.
+
+"Derivative" means a computer software (application) created by CUSTOMER that includes 
+or is based in whole or in part on the SOFTWARE, including, but not limited to, 
+incorporating the SOFTWARE into the Derivative by linking or otherwise using the 
+SOFTWARE in any form whatsoever in CUSTOMER's Derivative.
+
+"Documentation" means the Basler Product Documentation, Programmer's Guide and Reference 
+Documentation, User's Manuals, if any, accompanying delivery of the SOFTWARE. 
+Documentation may be delivered in printed and/or electronic and/or online forms.
+
+"Evaluation License" means a license, supplied to CUSTOMER in the form of a License File 
+that allows CUSTOMER to install and evaluate the SOFTWARE on any computer for a certain 
+period of time.
+
+"Runtime License" means a license, supplied to CUSTOMER in the form of a License File and 
+a corresponding removable hardware component, e.g., a dongle, that allows CUSTOMER to 
+install and use the SOFTWARE on any computer for an unlimited period of time.
+
+"License File" means a computer file that contains license keys that permit CUSTOMER to 
+use the SOFTWARE in a particular Software Configuration.
+
+"Nodelocked License" means a license, supplied to CUSTOMER in the form of a License File 
+that allows CUSTOMER to use the SOFTWARE only on the computer specified in the Nodelocked 
+License File.
+
+"SOFTWARE" means all files, libraries, programs, executable code, compiled code, including 
+but not limited to, BASLER's pylon software, any and all vTools as well as any other 
+BASLER or third party computer software, digital images and example programs. This also 
+includes upgrades, modified versions, updates, additions and copies of the SOFTWARE, if any, 
+licensed, delivered and provided to CUSTOMER by BASLER. The term "SOFTWARE" does not include 
+any Derivatives or other programs, which may include the SOFTWARE.
+
+"Software Configuration" means the Acquisition Version, the Demo Version, the Evaluation 
+Version and/or the Runtime Version, all as defined in Section 3.1 below, of the SOFTWARE.
+
+"Protected Data" includes the SOFTWARE as well as any and all components the content of which 
+is not disclosed by BASLER in human-readable form such as, the License Files, the Irremovable 
+Host ID, the Removable Host ID as well as any other files, data or hardware that is provided 
+by BASLER and not readily accessible for CUSTOMER without reverse engineering and/or breach 
+or circumvention of technical protection mechanisms. 
+
+"vTool" means a computer file or files that may incorporate algorithms and/or methods to 
+acquire, analyse, manipulate, modify or extract information, e.g., from a digitized image. 
+A vTool may require a License File that permits CUSTOMER to use the SOFTWARE in a particular 
+Software Configuration. 
+
+
+2. SOFTWARE OF THIRD-PARTY MANUFACTURERS.
+
+Notwithstanding the terms and conditions of this AGREEMENT, all or any portion of the SOFTWARE 
+which constitutes non-proprietary BASLER software or software provided under Open Source license 
+by third parties ("third-party software"), is licensed to CUSTOMER subject to the terms and 
+conditions of the software license agreement accompanying such third-party software. Use of the 
+third-party software by CUSTOMER shall be governed solely by the terms and conditions of such 
+license. CUSTOMER can find the license terms and conditions in the file 
+"pylon_Third-Party_Licenses.txt" or contact BASLER support. 
+SOFTWARE includes some Open Source software source code that may be used and modified by anyone 
+and everyone, provided they, in turn, make it available to everyone else with the same licensing 
+agreement. Please contact BASLER support for the original source code of components licensed 
+under Open Source licenses.
+CUSTOMER understands and agrees that acceptance of this AGREEMENT also confirms CUSTOMER's 
+acceptance of the applicable provisions for use, including the restrictions on use, of the 
+third-party software. Any breach of the applicable provisions of any third party's license 
+terms shall also be considered a material breach of this AGREEMENT.
+
+
+3. GRANT OF LICENSE.
+
+BASLER grants CUSTOMER a non-exclusive right to install and use the SOFTWARE provided that 
+CUSTOMER complies with all terms and conditions of this AGREEMENT.
+The licensed SOFTWARE and Documentation shall at all times remain the property of BASLER and/or 
+its licensors, and CUSTOMER, as licensee, shall have no right, title, or interest in the SOFTWARE, 
+except as expressly set forth in this AGREEMENT. The transfer of the SOFTWARE, including, but not 
+limited to, sublicensing and distribution to a third party is not permitted.
+
+3.1. SOFTWARE CONFIGURATIONS.
+Different rights, obligations and restrictions apply to each Software Configuration. 
+CUSTOMER's right to install and use the SOFTWARE is determined by the Software Configuration 
+selected, as set forth below:
+
+3.1.1. ACQUISITION VERSION.
+The Acquisition Version is a version of the SOFTWARE that solely allows CUSTOMER to operate Basler 
+hardware products such as cameras, frame grabbers, interface cards, light 
+controllers, light sources and others. The Acquisition Version excludes the use of vTools. It does 
+not require a License File. The Acquisition Version allows CUSTOMER to use the SOFTWARE on an 
+unlimited number of computers for an unlimited period of time. The Acquisition Version allows CUSTOMER 
+to (1) evaluate the full functionality of the SOFTWARE excluding vTools; (2) create, distribute and 
+sublicense Derivatives excluding vTools for commercial purposes. 
+If CUSTOMER chooses to distribute such Derivatives, CUSTOMER agrees (1) not to use BASLER's name, logo 
+or trademarks to market the Derivatives; (2) to display a valid copyright notice which shall be 
+sufficient to protect BASLER's copyright in the SOFTWARE; (3) not to remove or obscure any copyright, 
+trademark or patent notice that appear on the SOFTWARE as delivered to CUSTOMER; (4) to accompany the 
+Derivative with a license agreement whose terms and conditions are at least as restrictive as the terms 
+in this AGREEMENT; (5) to explicitly exclude BASLER, its Affiliates and its suppliers from all liability 
+for costs, losses, damages or any obligations to provide remedial actions that may result from the use 
+and distribution of Derivatives; (6) to indemnify, hold harmless and defend BASLER, its Affiliates and 
+suppliers from and against any costs, losses or damages, including attorney's fees, that arise in 
+connection with or result from CUSTOMER's use or distribution of the Derivatives; (7) otherwise comply 
+with the terms of this AGREEMENT; and (8) agrees that BASLER reserves all rights not expressly granted.
+BASLER will neither provide any support nor does BASLER accept any liabilities, warranties, 
+representations or other obligations for Derivatives developed and/or distributed by CUSTOMER.  
+In particular, CUSTOMER will be solely responsible to CUSTOMER's end users (or anyone else who uses 
+CUSTOMER's Derivatives) for support, service, upgrades, or technical or other assistance, and such 
+persons will have no right to contact BASLER for any services or assistance.  
+
+3.1.2. DEMO VERSION.
+The Demo Version is a version of the SOFTWARE that allows CUSTOMER to evaluate 
+the functionality of the SOFTWARE including vTools, for a certain period of time, typically for a maximum 
+of eighty (80) days. To use vTools, the Demo Version requires the online activation of a corresponding 
+Evaluation License File. The SOFTWARE may be installed on any number of computers. CUSTOMER's right to 
+use vTools is restricted to the purpose of evaluating vTools in the pylon Viewer application that may be 
+part of the SOFTWARE. The use of vTools in pylon Viewer is limited to five consecutive minutes and will 
+automatically be terminated thereafter. A Demo Version prohibits CUSTOMER to use vTools included in the 
+SOFTWARE for any other purposes than those mentioned above in this Section 3.1.2, in particular, but 
+without limitation, CUSTOMER must not use the SOFTWARE provided as a Demo Version for commercial purposes, 
+or use the Demo Version to develop commercial or non-commercial applications including vTools. 
+The Demo Version may be used only in the time period that is specified in the Evaluation License File.  
+After expiration of this time period, vTools included in the SOFTWARE will no longer work.
+
+3.1.3. EVALUATION VERSION.
+The Evaluation Version is a version of the SOFTWARE that allows CUSTOMER to 
+evaluate the functionality of the SOFTWARE including vTools, for a certain period of time, typically for 
+a maximum of one hundred eighty (180) days. To use vTools, the Evaluation Version requires the online 
+activation of a corresponding Evaluation License File. The SOFTWARE may be installed on any number of 
+computers provided that these devices are controlled by CUSTOMER.  CUSTOMER's right to use vTools and to 
+create Derivatives is restricted to the purpose of evaluating the SOFTWARE. The use of vTools is limited 
+to five consecutive minutes and will automatically be terminated thereafter. An Evaluation Version 
+prohibits CUSTOMER to use vTools included in the SOFTWARE for any other purposes than those mentioned in 
+this Section 3.1.3, in particular, without limitation, CUSTOMER must not use SOFTWARE provided as an 
+Evaluation Version for commercial purposes, or use the Evaluation Version to develop commercial 
+applications including vTools. The Evaluation Version may be used only in the time period that is 
+specified in the Evaluation License File.  After expiration of this time period, vTools included in the 
+SOFTWARE or used in Derivatives will no longer work.
+
+3.1.4. RUNTIME VERSION.
+Runtime Version is a version of the SOFTWARE that has to be purchased by CUSTOMER 
+and allows CUSTOMER to use the SOFTWARE including vTools for an unlimited period of time. The Runtime 
+Version is a version of the Software that allows CUSTOMER to (1) evaluate either the full or selected 
+functionality of the SOFTWARE including vTools; (2) create, distribute and sublicense Derivatives including 
+vTools for commercial purposes. The Runtime Version requires a Runtime License File. If CUSTOMER is 
+authorized and chooses to distribute such Derivatives, CUSTOMER agrees (1) not to use BASLER's name, logo 
+or trademarks to market the Derivatives; (2) to display a valid copyright notice which shall be sufficient 
+to protect BASLER's copyright in the SOFTWARE; (3) not to remove or obscure any copyright, trademark or 
+patent notice that appear on the SOFTWARE as delivered to CUSTOMER; (4) to accompany the Derivative with 
+a license agreement whose terms and conditions are at least as restrictive as the terms in this AGREEMENT; 
+(5) to explicitly exclude BASLER, its Affiliates and its suppliers from all liability for costs, losses, 
+damages or any obligations to provide remedial actions that may result from the use and distribution of 
+Derivatives; (6) to indemnify, hold harmless and defend BASLER, its Affiliates and its suppliers from and 
+against any costs, losses or damages, including attorney's fees, that arise in connection with or result 
+from CUSTOMER's use or distribution of the Derivatives; (7) otherwise comply with the terms of this 
+AGREEMENT; and (8) agrees that BASLER reserves all rights not expressly granted.
+BASLER will neither provide any support nor does BASLER accept any liabilities, warranties, representations 
+or other obligations for Derivatives developed and/or distributed by CUSTOMER.  In particular, CUSTOMER 
+will be solely responsible to CUSTOMER's end users (or anyone else who uses CUSTOMER's Derivatives) for 
+support, service, upgrades, or technical or other assistance, and such persons will have no right to 
+contact BASLER for any services or assistance.  
+
+3.2. LICENSE OPTIONS
+
+3.2.1. NODELOCKED LICENSES.
+A Nodelocked License allows CUSTOMER to install and use the Software only on the computer specified in the 
+Nodelocked License File. The computer is specified by a Host ID that is derived from a certain hardware 
+component, which may be bound to an irremovable computer component ("Irremovable Host ID"), for example, 
+a network card, or may be bound to a removable hardware component ("Removable Host ID"), for example, a dongle. 
+If CUSTOMER uses an Irremovable Host ID for licensing the SOFTWARE, CUSTOMER may only install and use the 
+SOFTWARE on the computer that includes the Irremovable Host ID. If CUSTOMER uses a Removable Host ID, CUSTOMER 
+may install the SOFTWARE on any number of computers, but CUSTOMER may only use the SOFTWARE on the computer to 
+which the Removable Host ID is attached.
+
+3.2.2. COMPLIANCE WITH LICENSES.
+CUSTOMER undertakes to keep true, accurate, and consistent books and records containing regular entries 
+relating to duplication and installations of the SOFTWARE and sales, distributions, or other transfers of 
+Derivatives. BASLER, its authorized representative, or its accountants (as determined by BASLER) may, for the 
+purpose of confirming CUSTOMER's compliance with the terms hereof, enter CUSTOMER's place of business on 
+reasonable written notice, but not less than twenty (20) business days, during normal business hours once per 
+year during the term of this AGREEMENT and once following the termination or expiration of this AGREEMENT. 
+BASLER, its authorized representative or its accountants shall be entitled to perform an audit of CUSTOMER's 
+relevant books, records, and software systems, and receive any explanations that may reasonably be requested. 
+BASLER shall be responsible for its costs incurred in connection with any such audit, provided that CUSTOMER 
+shall reimburse BASLER for the cost of the audit if the examination discloses an underpayment to BASLER of 
+more than five percent (5%) of the payments due with respect to any applicable period. Any further rights of 
+BASLER remain unaffected.  This Section 3.2.2 shall survive any termination or expiration of this AGREEMENT 
+for a period of three (3) years. CUSTOMER further agrees that upon request from BASLER or BASLER's authorized 
+representative, CUSTOMER will within thirty (30) days fully document and certify that use of any and all 
+SOFTWARE at the time of the request is in conformity with CUSTOMER's valid licenses from BASLER.
+
+3.3. DOCUMENTATION.
+CUSTOMER may make and use a reasonable number of copies of any Documentation, provided that such copies shall 
+be used only for internal purposes and are not to be published, distributed or otherwise made available 
+(either in hard copy or electronic form) outside CUSTOMER's organization. In particular, CUSTOMER may not 
+forward any Documentation to CUSTOMER's customers in connection with the Derivatives or to any other third 
+party.
+
+3.4. SAMPLE PROGRAMS AND IMAGES. 
+BASLER grants CUSTOMER the right to use and modify the sample programs and sample images included in the 
+SOFTWARE for the sole purposes of designing, developing, and testing CUSTOMER's software product(s). 
+
+
+4. PERMITTED USE OF THE SOFTWARE.
+CUSTOMER may solely use the SOFTWARE for the purpose to operate a BASLER camera product unless otherwise 
+negotiated between CUSTOMER and BASLER.
+
+
+5. OTHER RIGHTS AND LIMITATIONS
+
+5.1. RENTAL.
+CUSTOMER may not rent, lease, or lend the SOFTWARE to any third party.
+
+5.2. COPYING.
+CUSTOMER shall not copy or use the SOFTWARE except as set forth in this AGREEMENT. 
+CUSTOMER shall not remove any proprietary notices or labels on the SOFTWARE; any copies that CUSTOMER 
+is permitted to make pursuant to this AGREEMENT must contain the same copyright and other proprietary 
+notices that appear on and in the SOFTWARE.
+
+5.3. LIMITATION ON REVERSE ENGINEERING.
+CUSTOMER shall not reverse engineer, decompile, disassemble, or otherwise attempt to discover the 
+source code of the SOFTWARE or the file format or content of its Protected Data, unless (a) this 
+source code is provided by BASLER (e.g. for open source components) and/or (b) CUSTOMER is permitted 
+to do so under applicable statutory law that cannot be modified by this AGREEMENT.  If it is essential 
+to do so in order to achieve interoperability of the SOFTWARE with other software programs, CUSTOMER 
+shall request BASLER to provide the information necessary to achieve such interoperability and BASLER 
+will provide such information upon mutual consent.
+In this case, BASLER has the right to request (a) acceptance of reasonable contractual conditions by 
+CUSTOMER and/or (b) a reasonable financial compensation before providing such information.  Any 
+information supplied by BASLER to achieve interoperability is strictly confidential, protected by 
+applicable laws and must only be used by CUSTOMER for the purpose described herein and may not be 
+disclosed to any third party.
+CUSTOMER may not modify, adapt, or otherwise alter the SOFTWARE or Protected Data except as expressly 
+permitted herein.  In particular, CUSTOMER may not attempt to remove, override, modify, change or 
+otherwise temper with any protection mechanisms of the SOFTWARE or any part thereof.
+
+5.4. UPGRADES.
+Different rights and obligations apply to the Software Configurations as listed in the following 
+provisions.
+
+5.4.1. RUNTIME VERSION. 
+If the SOFTWARE in its Runtime Version is an upgrade to a previous version of the SOFTWARE, CUSTOMER 
+must possess a valid license to such previous version in order to use the upgrade. 
+CUSTOMER may continue to use the previous version of the SOFTWARE on CUSTOMER's computer(s) after 
+CUSTOMER received the upgrade, provided that (i) the previous version or copies thereof are not 
+transferred to another party or computer unless all copies of the upgrade are also transferred to such 
+party or computer; and (ii) CUSTOMER acknowledges that any obligation BASLER may have to support the 
+previous version of the SOFTWARE ends upon availability of the upgrade.
+
+5.5. PROPRIETARY RIGHTS.
+All intellectual property rights in the SOFTWARE are owned by BASLER or its 
+suppliers and are protected by intellectual property, in particular, without limitation, by copyright 
+laws and international copyright treaties. CUSTOMER shall not remove any product identification, 
+copyright notices or proprietary restrictions from the SOFTWARE. The SOFTWARE is licensed, not sold.
+
+5.6. TERMINATION.
+Without prejudice to any other rights, BASLER may terminate this AGREEMENT if CUSTOMER 
+fails to comply with the terms and conditions of this AGREEMENT. In such event, CUSTOMER must destroy 
+all copies of the SOFTWARE and all of its components as well as any and all Derivatives.
+
+
+6. LIMITED WARRANTY.
+BASLER warrants to CUSTOMER that the performance and functionality of the SOFTWARE purchased by CUSTOMER 
+will in all material aspects comply with the Documentation for a period of twelve (12) months following 
+receipt of the SOFTWARE, provided that the SOFTWARE is used on a recommended hardware configuration. The 
+aforementioned warranty is extended for the period of the applicable statute of limitations in cases 
+where a deviation of the SOFTWARE from the Documentation is caused by BASLER's gross negligence or willful 
+misconduct.
+BASLER expressly excludes all liability for non-substantial variations of performance of the SOFTWARE from 
+the Documentation, which do not affect the core functionalities of and the results achieved with the SOFTWARE. 
+This warranty does not apply to updates, upgrades, pre-releases, or to SOFTWARE that has been altered by 
+CUSTOMER, to the extent such alterations caused a defect. To make a warranty claim, CUSTOMER must return the 
+SOFTWARE to the location where CUSTOMER obtained it along with proof of purchase within the period of time 
+set forth above. If the SOFTWARE does not perform substantially in accordance with the Documentation, BASLER 
+may, in its sole discretion repair or replace the SOFTWARE.
+EXCEPT FOR THIS EXPRESS LIMITED WARRANTY, AND TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, BASLER AND 
+ITS SUPPLIERS PROVIDE THE SOFTWARE PRODUCT "AS IS" AND WITH ALL FAULTS, AND HEREBY DISCLAIM ALL OTHER 
+WARRANTIES AND CONDITIONS, EITHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, WARRANTIES 
+OF TITLE AND NON-INFRINGEMENT, ANY IMPLIED WARRANTIES, DUTIES OR CONDITIONS OF MERCHANTABILITY, OF FITNESS 
+FOR A PARTICULAR PURPOSE, AND OF LACK OF VIRUSES ALL WITH REGARD TO THE SOFTWARE PRODUCT. 
+Some states/jurisdictions do not allow exclusion of implied warranties or limitations on the duration of 
+implied warranties, so the above disclaimer may not apply to CUSTOMER in its entirety.
+
+
+7. LIMITATION OF LIABILITY.
+
+7.1. CUSTOMER acknowledges that using or selling SOFTWARE in devices or systems where malfunction may result 
+in personal injury, death, damage to property or the environment is at its own risk and agrees to indemnify 
+and BASLER harmless from all losses and damages (including legal fees) which may be incurred by BASLER as a 
+result of any claims or actions resulting from damages caused by the use of the SOFTWARE in such devices or 
+systems by CUSTOMER or any party the CUSTOMER has directly or indirectly supplied the SOFTWARE to.
+
+7.2. BASLER, its legal representatives and vicarious agents shall - irrespective of the legal ground - only be 
+liable for damages if the damage was caused through BASLER's culpable breach of a major contractual obligation 
+(cardinal duty), gross negligence or willful misconduct. Any further liability for damages is expressly 
+excluded unless set forth otherwise below.
+
+7.3. Subject to this Section 7.4., if BASLER is liable for the violation of a major contractual obligation in 
+the absence of gross negligence or willful misconduct, such liability for damage shall be limited to damages, 
+which were foreseeable by BASLER at the time when the contract with the CUSTOMER became effective.
+
+7.4. BASLER shall in no event be liable for indirect or consequential damages, loss of profit, loss of business 
+or commercial opportunities, loss of or damage to goodwill or reputation.
+
+7.5. BASLER shall in no event be liable for an amount exceeding in aggregate, for any and all claims, the actual 
+payment received by BASLER under the agreement with the CUSTOMER or 1,000,000.00 EUR (one million EURO) 
+whichever is lower.
+
+7.6. The limitation or exclusion of liability stated above shall NOT apply in the case of culpable injury to 
+life, body or health, or willful misconduct or under the liability provisions of the German Product Liability 
+Act.
+
+
+8. HAZARDOUS USES.
+The SOFTWARE is not designed and/or intended for use in connection with any application 
+requiring fail-safe performance, such as the operation of nuclear power facilities, air traffic control or 
+navigation systems, weapon control systems, life support systems, or any other system whose failure could lead 
+to death, personal injury, or severe physical or environmental damage (High Risk Use). CUSTOMER agrees that 
+CUSTOMER may not use the SOFTWARE in such High Risk Use scenarios.
+
+
+9. GOVERNING LAW AND JURISDICTION.
+This AGREEMENT shall be considered to have been entered into and construed in accordance with the laws of 
+Germany to the exclusion of the provisions of the UN Convention on Contracts for the International Sale of 
+Goods (CISG). The District Court (Landgericht) Hamburg shall have exclusive jurisdiction over all disputes 
+arising in connection with this AGREEMENT.
+
+
+10. GENERAL.
+This AGREEMENT is the complete and exclusive statement of the agreement between the parties and supersedes 
+all prior agreements and communications with respect to the subject matter. This AGREEMENT shall be binding 
+upon and inure to the benefit of the parties hereto and their respective successors and assigns and cannot 
+be modified except by a written document signed by both parties. If any provision of this AGREEMENT is held 
+invalid, the offending clause will be modified so as to be enforceable and, as modified, shall be fully 
+enforced, and the remainder of this AGREEMENT will continue in full force and effect.

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors>Gonçalo Lopes</Authors>
     <Title>Bonsai - Pylon Library</Title>
-    <Description>Bonsai Library containing modules for interfacing with Basler cameras. The pylon 5.1.0 runtime is required.</Description>
+    <Description>Bonsai Library containing modules for interfacing with Basler cameras. The pylon 7.1.0 runtime is required.</Description>
     <Copyright>Copyright © Gonçalo Lopes 2022</Copyright>
     <ProjectUrl>https://github.com/bonsai-rx/pylon</ProjectUrl>
     <PackageLicenseUrl>https://github.com/bonsai-rx/pylon/blob/master/LICENSE</PackageLicenseUrl>
@@ -20,8 +20,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\Externals\Basler.Pylon\pylon License.rtf" PackagePath="build\net462"/>
-    <Content Include="..\Externals\Basler.Pylon\pylon Third-Party Licenses.html" PackagePath="build\net462"/>
+    <Content Include="..\Externals\Basler.Pylon\License.txt" PackagePath="build\net462"/>
+    <Content Include="..\Externals\Basler.Pylon\pylon_Third-Party_Licenses.txt" PackagePath="build\net462"/>
     <Content Include="..\Externals\Basler.Pylon\**\*.dll" PackagePath="build\net462\bin" />
     <Reference Include="Basler.Pylon">
       <HintPath>..\Externals\Basler.Pylon\x64\Basler.Pylon.dll</HintPath>
