@@ -20,6 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Bonsai.Pylon.props" PackagePath="build\net462" />
     <Content Include="..\Externals\Basler.Pylon\License.txt" PackagePath="build\net462"/>
     <Content Include="..\Externals\Basler.Pylon\pylon_Third-Party_Licenses.txt" PackagePath="build\net462"/>
     <Content Include="..\Externals\Basler.Pylon\**\*.dll" PackagePath="build\net462\bin" />
