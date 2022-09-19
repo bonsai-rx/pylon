@@ -137,6 +137,11 @@ namespace Bonsai.Pylon
             }
         }
 
+        protected virtual void Configure(Camera camera)
+        {
+            camera.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.Continuous);
+        }
+
         public override IObservable<PylonDataFrame> Generate()
         {
             return Observable.Create<PylonDataFrame>((observer, cancellationToken) =>
@@ -182,7 +187,7 @@ namespace Bonsai.Pylon
                                     }
                                 };
 
-                                camera.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.Continuous);
+                                Configure(camera);
                                 camera.StreamGrabber.Start(GrabStrategy, GrabLoop.ProvidedByStreamGrabber);
                                 cancellationToken.WaitHandle.WaitOne();
                             }
