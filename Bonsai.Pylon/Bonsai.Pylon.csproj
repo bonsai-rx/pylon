@@ -15,8 +15,9 @@
     <PackageOutputPath>..\bin\$(Configuration)</PackageOutputPath>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TargetFramework>net462</TargetFramework>
+    <VersionPrefix>0.3.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
     <Features>strict</Features>
-    <Version>0.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
