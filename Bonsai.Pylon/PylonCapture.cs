@@ -13,73 +13,7 @@ namespace Bonsai.Pylon
     [Description("Acquires a sequence of images from a Basler camera using the pylon software.")]
     public class PylonCapture : Source<PylonDataFrame>
     {
-        IObservable<PylonDataFrame> source;
         readonly object captureLock = new object();
-
-        public PylonCapture()
-        {
-            source = Observable.Create<PylonDataFrame>((observer, cancellationToken) =>
-            {
-                return Task.Factory.StartNew(() =>
-                {
-                    lock (captureLock)
-                    {
-                        var configFile = ParameterFile;
-                        using (var camera = new Camera(SerialNumber))
-                        using (var converter = new PixelDataConverter())
-                        {
-                            camera.Open();
-                            if (!string.IsNullOrEmpty(configFile))
-                            {
-                                camera.Parameters.Load(configFile, ParameterPath.CameraDevice);
-                            }
-
-                            try
-                            {
-                                camera.StreamGrabber.ImageGrabbed += (sender, e) =>
-                                {
-                                    var result = e.GrabResult;
-                                    if (result.IsValid)
-                                    {
-                                        int channels;
-                                        IplDepth depth;
-                                        PixelType outputFormat;
-                                        var size = new Size(result.Width, result.Height);
-                                        GetImageDepth(result.PixelTypeValue, out depth, out channels, out outputFormat);
-                                        converter.OutputPixelFormat = outputFormat;
-                                        var output = new IplImage(size, depth, channels);
-                                        converter.Convert(output.ImageData, output.WidthStep * output.Height, result);
-                                        observer.OnNext(new PylonDataFrame(output, result));
-                                    }
-                                };
-
-                                camera.StreamGrabber.GrabStopped += (sender, e) =>
-                                {
-                                    if (e.Reason != GrabStopReason.UserRequest)
-                                    {
-                                        observer.OnError(new CaptureException(e.ErrorMessage));
-                                    }
-                                };
-
-                                camera.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.Continuous);
-                                camera.StreamGrabber.Start(GrabStrategy, GrabLoop.ProvidedByStreamGrabber);
-                                cancellationToken.WaitHandle.WaitOne();
-                            }
-                            finally
-                            {
-                                camera.StreamGrabber.Stop();
-                                camera.Close();
-                            }
-                        }
-                    }
-                },
-                cancellationToken,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
-            })
-            .PublishReconnectable()
-            .RefCount();
-        }
 
         [TypeConverter(typeof(SerialNumberConverter))]
         [Description("The serial number of the camera from which to acquire images.")]
@@ -205,7 +139,65 @@ namespace Bonsai.Pylon
 
         public override IObservable<PylonDataFrame> Generate()
         {
-            return source;
+            return Observable.Create<PylonDataFrame>((observer, cancellationToken) =>
+            {
+                return Task.Factory.StartNew(() =>
+                {
+                    lock (captureLock)
+                    {
+                        var configFile = ParameterFile;
+                        using (var camera = new Camera(SerialNumber))
+                        using (var converter = new PixelDataConverter())
+                        {
+                            camera.Open();
+                            if (!string.IsNullOrEmpty(configFile))
+                            {
+                                camera.Parameters.Load(configFile, ParameterPath.CameraDevice);
+                            }
+
+                            try
+                            {
+                                camera.StreamGrabber.ImageGrabbed += (sender, e) =>
+                                {
+                                    var result = e.GrabResult;
+                                    if (result.IsValid)
+                                    {
+                                        int channels;
+                                        IplDepth depth;
+                                        PixelType outputFormat;
+                                        var size = new Size(result.Width, result.Height);
+                                        GetImageDepth(result.PixelTypeValue, out depth, out channels, out outputFormat);
+                                        converter.OutputPixelFormat = outputFormat;
+                                        var output = new IplImage(size, depth, channels);
+                                        converter.Convert(output.ImageData, output.WidthStep * output.Height, result);
+                                        observer.OnNext(new PylonDataFrame(output, result));
+                                    }
+                                };
+
+                                camera.StreamGrabber.GrabStopped += (sender, e) =>
+                                {
+                                    if (e.Reason != GrabStopReason.UserRequest)
+                                    {
+                                        observer.OnError(new CaptureException(e.ErrorMessage));
+                                    }
+                                };
+
+                                camera.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.Continuous);
+                                camera.StreamGrabber.Start(GrabStrategy, GrabLoop.ProvidedByStreamGrabber);
+                                cancellationToken.WaitHandle.WaitOne();
+                            }
+                            finally
+                            {
+                                camera.StreamGrabber.Stop();
+                                camera.Close();
+                            }
+                        }
+                    }
+                },
+                cancellationToken,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
+            });
         }
 
         class SerialNumberConverter : StringConverter
