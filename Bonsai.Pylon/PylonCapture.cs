@@ -1,4 +1,4 @@
-﻿using Basler.Pylon;
+using Basler.Pylon;
 using OpenCV.Net;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,11 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Bonsai.Pylon
 {
+    [XmlType(Namespace = Constants.XmlNamespace)]
     [Description("Acquires a sequence of images from a Basler camera using the pylon software.")]
     public class PylonCapture : Source<PylonDataFrame>
     {
