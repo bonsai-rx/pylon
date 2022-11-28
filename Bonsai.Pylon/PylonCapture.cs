@@ -165,7 +165,7 @@ namespace Bonsai.Pylon
                                 camera.StreamGrabber.ImageGrabbed += (sender, e) =>
                                 {
                                     var result = e.GrabResult;
-                                    if (result.IsValid)
+                                    if (result.GrabSucceeded && result.IsValid)
                                     {
                                         int channels;
                                         IplDepth depth;
