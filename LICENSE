@@ -1,7 +1,4 @@
-Copyright (C) 2022 Gonçalo Lopes
-
-In addition to the MIT license terms expressed in the following, this software
-is subject to the terms of the pylon End-User License Agreement (included below).
+Copyright (c) Bonsai Foundation CIC and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -21,7 +18,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-----------------------
+-------------------------------------------------------------------------------
+
 This software integrates and makes use of the pylon Software Development Kit,
 which is subject to the following license agreement:
 
